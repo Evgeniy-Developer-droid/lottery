@@ -1,0 +1,26 @@
+.new-lottery form .fieldWrapper{
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+}
+.new-lottery form .fieldWrapper input{
+    padding: 5px;
+}
+.new-lottery .form-wrap{
+    min-height: 80vh;
+}
+#id_count_ticket, #id_ticket_price, #id_finish{
+    min-width: 230px;
+    max-width: 250px;
+}
+.new-lottery form .wrap_small_fields{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+#id_description{
+    resize: none;
+}
+#id_thumbnail{
+    width: fit-content;
+}

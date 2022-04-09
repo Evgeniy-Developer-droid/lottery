@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="13.36.37.175" id="e1c79e5d-ecf0-461d-b7df-40260c103c0b" keyPath="$USER_HOME$/Downloads/Telegram Desktop/pempem.pem" port="22" nameFormat="DESCRIPTIVE" username="ec2-user" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>

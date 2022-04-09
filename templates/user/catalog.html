@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Catalog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'user/css/catalog.css' %}" type="text/css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body class="catalog">
+{% include 'public/pieces/header.html' %}
+
+<main>
+    <div class="container">
+        <div class="row">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Thumbnail</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Count tickets</th>
+                        <th scope="col">Price tickets</th>
+                        <th scope="col">Start lottery</th>
+                        <th scope="col">Finish lottery</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in page_obj %}
+                        <tr>
+                            <th scope="row">{{ item.id }}</th>
+                            <td><img src="{{ item.thumbnail.url }}" alt=""></td>
+                            <td><a href="{% url 'view-lottery' item.id %}">{{ item.name }}</a></td>
+                            <td>{{ item.count_ticket }}</td>
+                            <td>{{ item.ticket_price }}</td>
+                            <td>{{ item.start }}</td>
+                            <td>{{ item.finish }}</td>
+                            <td>{{ item.status }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    <div class="row">
+                <nav>
+                    <ul class="pagination">
+                        <input type="hidden" id="count_pages" value="{{ page_obj.paginator.num_pages }}">
+                        <input type="hidden" id="now_page" value="{{ page_obj.number }}">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1" tabindex="-1">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">First</a>
+                            </li>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                        {% endif %}
+
+                        <div id="pages-wrap" style="display: flex">
+                        </div>
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Last</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+    </div>
+</main>
+{% include 'public/pieces/footer.html' %}
+<script src="{% static 'public/js/pagination.js' %}"></script>
+</body>
+</html>

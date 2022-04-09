@@ -1,0 +1,44 @@
+<header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="{% url 'index' %}" class="nav-link px-2 text-white">Home</a></li>
+                <li><a href="{% url 'catalog' %}" class="nav-link px-2 text-white">Catalog</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+            </form>
+
+            <div class="text-end">
+                {% if user.is_authenticated %}
+                    <div class="btn-group">
+                        <a href='{% if user.profile.type_user == "player" %}{% url "tickets" %}{% else %}{% url "user-catalog" %}{% endif %}' class="btn btn-warning">Profile</a>
+                        <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Notifications</a></li>
+                            <li><a class="dropdown-item" href="#">Messages</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            {% if user.profile.type_user == "player" %}<li><a class="dropdown-item" href="{% url 'tickets' %}">Tickets</a></li>{% endif %}
+                            {% if user.profile.type_user == "leader" %}<li><a class="dropdown-item" href="{% url 'user-catalog' %}">My Catalog</a></li>{% endif %}
+                            {% if user.profile.type_user == "leader" %}<li><a class="dropdown-item" href="{% url 'new-lottery' %}">New Lottery</a></li>{% endif %}
+                            <li><a class="dropdown-item" href="{% url 'settings' %}">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href='{% url "logout" %}'>Log out</a></li>
+                        </ul>
+                        <a class="btn btn-light" style="margin-left: 5px">Coins: {{ coins }}.00</a>
+                    </div>
+                {% else %}
+                    <a href='{% url "signin" %}' class="btn btn-outline-light me-2">Sign in</a>
+                    <a href='{% url "signup" %}' class="btn btn-warning">Sign up</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</header>
