@@ -15,6 +15,7 @@
 <main>
     <div class="container">
         <div class="row" style="margin-top: 20px"  >
+            <div class="alert" style="display: none" id="messages-response"></div>
             {% if error %}
                 <div class="alert alert-warning" role="alert" style="margin-top: 20px">
                     {{ error }}
@@ -25,7 +26,11 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex flex-column align-items-center text-center">
+                                <div class="img-icon">
+                                    {% if user_data.id == user.id %} <div class="change-avatar"><i class="bi bi-plus-circle-fill"></i></div>    {% endif %}
                                     <img src="{% if user_data.profile.image %}{{ user_data.profile.image.url }}{% else %}https://bootdey.com/img/Content/avatar/avatar7.png{% endif %}" alt="Admin" class="rounded-circle" width="150">
+                                </div>
+
                                     <div class="mt-3">
                                         <h4>{{ user_data.first_name }} {{ user_data.last_name }}</h4>
                                         <button class="btn btn-outline-primary">Message</button>
@@ -57,28 +62,57 @@
                     <div class="col-md-8">
                         <div class="card mb-3">
                             <div class="card-body">
-                                <div class="row">
+                                <div class="row field-row">
+                                    {% if user_data.id == user.id %}
+                                        <div style="display: none" class="btn-custom">edit</div>
+                                    {% endif %}
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Email</h6>
                                     </div>
+                                    {% if user_data.id == user.id %}
+                                        <div class="col-sm-9 input-group" style="display: none">
+                                            <input type="text" class="form-control" value="{{ user_data.email }}">
+                                            <button class="btn btn-primary">Save</button>
+                                        </div>
+                                    {% endif %}
                                     <div class="col-sm-9 text-secondary">
                                         {{ user_data.email }}
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="row">
+
+                                <div class="row field-row">
+                                    {% if user_data.id == user.id %}
+                                        <div style="display: none" class="btn-custom">edit</div>
+                                    {% endif %}
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Phone</h6>
                                     </div>
+                                    {% if user_data.id == user.id %}
+                                            <div class="col-sm-9 input-group" style="display: none">
+                                                <input type="text" class="form-control" value="{{ user_data.profile.phone }}">
+                                                <button class="btn btn-primary">Save</button>
+                                            </div>
+                                        {% endif %}
                                     <div class="col-sm-9 text-secondary">
                                         {{ user_data.profile.phone }}
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="row">
+
+                                <div class="row field-row">
+                                    {% if user_data.id == user.id %}
+                                        <div style="display: none" class="btn-custom">edit</div>
+                                    {% endif %}
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Address</h6>
                                     </div>
+                                {% if user_data.id == user.id %}
+                                        <div class="col-sm-9 input-group" style="display: none">
+                                            <input type="text" class="form-control" value="{{ user_data.profile.address }}">
+                                            <button class="btn btn-primary">Save</button>
+                                        </div>
+                                    {% endif %}
                                     <div class="col-sm-9 text-secondary">
                                         {{ user_data.profile.address }}
                                     </div>
@@ -141,6 +175,13 @@
         </div>
     </div>
 </main>
+
+<div class="hidden">
+    <input type="file" class="file" id="file" accept="image/*">
+</div>
+
+
 {% include 'public/pieces/footer.html' %}
+<script src="{% static 'user/js/user-detail.js' %}"></script>
 </body>
 </html>

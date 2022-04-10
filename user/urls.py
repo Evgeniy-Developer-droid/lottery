@@ -11,4 +11,5 @@ urlpatterns = [
     path('user-detail/<int:pk>', views.user_detail, name="user-detail"),
 
     path('api/define-winners', api.define_winners, name="api-define-winners"),
+    path('api/change-user-avatar', api.change_user_avatar, name="api-change-user-avatar"),
 ]

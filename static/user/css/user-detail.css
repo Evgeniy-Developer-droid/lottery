@@ -83,3 +83,32 @@ body{
 .textarea {
     resize: none
 }
+
+.img-icon {
+    position: relative;
+}
+
+.img-icon .change-avatar{
+    position: absolute;
+    color: #198000;
+    font-size: 25px;
+    bottom: -18px;
+    right: 22px;
+    cursor: pointer;
+}
+.hidden{
+    display: none !important;
+}
+.field-row{
+    position: relative;
+}
+.btn-custom{
+    background: blueviolet;
+    font-size: 13px;
+    font-weight: 400;
+    position: absolute;
+    width: fit-content !important;
+    left: -44px;
+    border-radius: 10px;
+    cursor: pointer;
+}

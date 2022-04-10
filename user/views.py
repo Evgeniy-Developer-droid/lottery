@@ -72,7 +72,7 @@ def view_lottery(request, pk):
 @login_required(login_url='/signin/')
 def settings(request):
     coins = get_coins_by_user(request)
-    return render(request, 'user/tickets.html', {'coins': coins})
+    return render(request, 'user/settings.html', {'coins': coins})
 
 
 @login_required(login_url='/signin/')
