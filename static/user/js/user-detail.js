@@ -11,16 +11,16 @@ jQuery(document).ready(function ($){
             fd.append('file', files[0]);
             $.ajax({
                 url: '/user/api/change-user-avatar',
-                type: 'post',
+                type: 'POST',
                 data: fd,
                 contentType: false,
                 processData: false,
                 beforeSend: function(xhr, settings) {
-                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                    // Only send the token to relative URLs i.e. locally.
-                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                }
-            },
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                        // Only send the token to relative URLs i.e. locally.
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    }
+                },
                 success: function(response){
                     if(response.type === "success"){
                         let m = $("#messages-response")
@@ -61,6 +61,40 @@ jQuery(document).ready(function ($){
         setTimeout(()=>{
             parent.children(".input-group").fadeIn()
         }, 1000)
+    })
+
+    $(".btn-save").click(function (){
+        let parent = $(this).parent()
+        let value = parent.children('.form-control').val()
+        let action = parent.children('.form-control').data('action')
+        console.log(value, action)
+        $.ajax({
+            url: '/user/api/change-user-data',
+            type: 'POST',
+            data: {value:value, action:action},
+            beforeSend: function(xhr, settings) {
+                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
+            },
+            success: function(response){
+                if(response.type === "success"){
+                    let m = $("#messages-response")
+                    m.text(response.message)
+                    m.addClass("alert-success");
+                    m.fadeIn()
+                    setTimeout(()=>{
+                        window.location.reload()
+                    }, 1500)
+                }else{
+                    let m = $("#messages-response")
+                    m.text(response.message)
+                    m.removeClass("alert-success")
+                    m.addClass("alert-danger");
+                    m.fadeIn()
+                }
+            },
+        });
     })
 
 

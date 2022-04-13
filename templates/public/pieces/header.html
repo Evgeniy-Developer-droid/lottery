@@ -32,7 +32,7 @@
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href='{% url "logout" %}'>Log out</a></li>
                         </ul>
-                        <a class="btn btn-light" style="margin-left: 5px">Coins: {{ coins }}.00</a>
+                        <a class="btn btn-light" style="margin-left: 5px" href="{% url 'replenish_the_balance' %}">Coins: {{ coins }}.00</a>
                     </div>
                 {% else %}
                     <a href='{% url "signin" %}' class="btn btn-outline-light me-2">Sign in</a>

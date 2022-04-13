@@ -16,7 +16,7 @@ def tickets_view(request):
     paginator = Paginator(tickets, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'user/tickets.html', {'page_obj':page_obj, 'coins':coins})
+    return render(request, 'user/tickets.html', {'page_obj':page_obj, "title": "Tickets", 'coins':coins})
 
 
 @login_required(login_url='/signin/')
@@ -30,6 +30,7 @@ def catalog(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'user/catalog.html', {
         'page_obj': page_obj,
+        "title": "Catalog",
         'coins': coins
     })
 
@@ -46,10 +47,11 @@ def new_lottery(request):
             return redirect('user-catalog')
         else:
             return render(request, 'user/new-lottery.html', {'form': form,
+                                                             "title": "New lottery",
                                                              'error': result['message'], 'coins':coins})
     else:
         form = NewLotteryForm()
-    return render(request, 'user/new-lottery.html', {'form': form, 'coins':coins})
+    return render(request, 'user/new-lottery.html', {'form': form, "title": "New lottery", 'coins':coins})
 
 
 @login_required(login_url='/signin/')
@@ -63,6 +65,7 @@ def view_lottery(request, pk):
         winners = get_winners(lottery.id)
         return render(request, 'user/lottery_view.html', {'coins': coins,
                                                           'item': lottery,
+                                                          "title": lottery.name,
                                                           "tickets": tickets,
                                                           "lottery": lottery.status in ("finished", "canceled"),
                                                           "wins": winners})
@@ -72,7 +75,7 @@ def view_lottery(request, pk):
 @login_required(login_url='/signin/')
 def settings(request):
     coins = get_coins_by_user(request)
-    return render(request, 'user/settings.html', {'coins': coins})
+    return render(request, 'user/settings.html', {'coins': coins, "title": "Settings"})
 
 
 @login_required(login_url='/signin/')
@@ -84,8 +87,10 @@ def user_detail(request, pk):
         result = post_review(request, pk)
         return render(request, 'user/user-detail.html', {'coins': coins,
                                                          'user_data': user,
+                                                         "title": user.first_name + user.last_name,
                                                          "result": result,
                                                          "reviews": reviews})
     if user:
-        return render(request, 'user/user-detail.html', {'coins': coins, 'user_data': user, "reviews": reviews})
-    return render(request, 'user/user-detail.html', {'coins': coins, 'error': "User doesn`t exist!"})
+        return render(request, 'user/user-detail.html', {'coins': coins, "title": user.first_name + user.last_name,
+                                                         'user_data': user, "reviews": reviews})
+    return render(request, 'user/user-detail.html', {'coins': coins, "title": "Not found", 'error': "User doesn`t exist!"})

@@ -8,7 +8,7 @@ from user.Business.lottery_logic import get_coins_by_user
 
 def index(request):
     coins = get_coins_by_user(request)
-    return render(request, 'public/index.html', {'coins':coins})
+    return render(request, 'public/index.html', {'coins':coins, "title":"Lottery"})
 
 
 def logout_(request):
@@ -28,12 +28,12 @@ def signin(request):
                     login(request, user)
                     return redirect('tickets')
                 else:
-                    return render(request, 'public/login.html', {'form': form, 'error':"Disabled account", 'coins':coins})
+                    return render(request, 'public/login.html', {'form': form, "title": "Login", 'error':"Disabled account", 'coins':coins})
             else:
-                return render(request, 'public/login.html', {'form': form, 'error':"Invalid login", 'coins':coins})
+                return render(request, 'public/login.html', {'form': form, "title": "Login", 'error':"Invalid login", 'coins':coins})
     else:
         form = LoginForm()
-    return render(request, 'public/login.html', {'form': form, 'coins':coins})
+    return render(request, 'public/login.html', {'form': form, "title": "Login", 'coins':coins})
 
 
 def signup(request):
@@ -51,7 +51,7 @@ def signup(request):
             return redirect('tickets')
     else:
         form = SignUpForm()
-    return render(request, 'public/signup.html', {'form': form, 'coins':coins})
+    return render(request, 'public/signup.html', {'form': form, "title": "Register", 'coins':coins})
 
 
 def catalog(request):
@@ -60,7 +60,7 @@ def catalog(request):
     paginator = Paginator(items, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'public/catalog.html', {'coins':coins, 'page_obj': page_obj})
+    return render(request, 'public/catalog.html', {'coins':coins, "title": "Catalog", 'page_obj': page_obj})
 
 
 def single(request, pk):
@@ -68,5 +68,5 @@ def single(request, pk):
     item = get_lottery_by_id(pk)
     if item:
         tickets_meta = get_tickets_meta(pk)
-        return render(request, 'public/single.html', {'item': item, 'tickets_meta': tickets_meta, 'coins':coins})
-    return render(request, 'public/single.html', {'message': 'Lottery not found', 'coins':coins})
+        return render(request, 'public/single.html', {'item': item, "title": item.name, 'tickets_meta': tickets_meta, 'coins':coins})
+    return render(request, 'public/single.html', {'message': 'Lottery not found', "title": "Ticket", 'coins':coins})
