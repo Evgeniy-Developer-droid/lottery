@@ -1,14 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
     <!-- CSS only -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'public/css/index.css' %}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
-<body>
+<body id="page-top">
 {% include 'public/pieces/header.html' %}
+
+        <!-- Mashead header-->
+        <header class="masthead">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class="col-lg-6">
+                        <!-- Mashead text and app badges-->
+                        <div class="mb-5 mb-lg-0 text-center text-lg-start">
+                            <h1 class="display-1 lh-1 mb-3">You will definitely be lucky!</h1>
+                            <p class="lead fw-normal text-muted mb-5">Our site contains a large number of lotteries and draws.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <!-- Masthead device mockup feature-->
+                        <div class="masthead-device-mockup">
+                            <img src="{% static 'public/img/blog1618814263.jpg' %}" width="100%" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Quote/testimonial aside-->
+        <aside class="text-center bg-gradient-primary-to-secondary">
+            <div class="container px-5">
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-xl-8">
+                        <div class="h2 fs-1 text-white mb-4">On our site you can become:</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Basic features section-->
+        <section class="bg-light">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+                    <div class="col-12 col-lg-5">
+                        <h2 class="display-4 lh-1 mb-4">LEADER</h2>
+                        <p class="lead fw-normal text-muted mb-5 mb-lg-0">Create your own lotteries and draws, set the date of the game where only you decide the winner. Receive funds from the purchase of tickets. And also advertise your draws on social networks!</p>
+                    </div>
+                    <div class="col-sm-8 col-md-6">
+                        <div class="px-5 px-sm-0"><img class="img-fluid rounded-circle" src="{% static 'public/img/4-benefits-of-playing-the-lottery.jpg' %}" alt="..."></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+<!-- Basic features section-->
+        <section class="bg-light">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+                    <div class="col-sm-8 col-md-6">
+                        <div class="px-5 px-sm-0"><img class="img-fluid rounded-circle" src="{% static 'public/img/thumb_720_450_good-luck-on-sticky-note_shutterstock_74627053.jpg' %}" alt="..."></div>
+                    </div>
+                    <div class="col-12 col-lg-5">
+                        <h2 class="display-4 lh-1 mb-4">PLAYER</h2>
+                        <p class="lead fw-normal text-muted mb-5 mb-lg-0">Choose completely different lotteries and draws, buy tickets and be lucky! Pay attention to leader ratings, and leave comments and rate the leader after receiving a gift!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+        <!-- Call to action section-->
+        <section class="cta" style="background-image: url({% static 'public/img/lottery.webp' %});">
+            <div class="cta-content">
+                <div class="container px-5">
+                    <h2 class="text-white display-1 lh-1 mb-4">
+                        Choose who you are
+                    </h2>
+                    <a class="btn btn-outline-light py-3 px-4 rounded-pill" href="{% url 'signup' %}?role=leader" target="_blank">Become a leader</a>
+                    <a class="btn btn-outline-light py-3 px-4 rounded-pill" href="{% url 'signup' %}?role=player" target="_blank">Become a player</a>
+                </div>
+            </div>
+        </section>
+        <!-- App badge section-->
+        <section class="bg-gradient-primary-to-secondary" id="download">
+            <div class="container px-5">
+                <h2 class="text-center text-white font-alt mb-4">Get the app now!</h2>
+                <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center">
+                    <a class="me-lg-3 mb-4 mb-lg-0" href="#!"><img class="app-badge" src="assets/img/google-play-badge.svg" alt="..."></a>
+                    <a href="#!"><img class="app-badge" src="assets/img/app-store-badge.svg" alt="..."></a>
+                </div>
+            </div>
+        </section>
+
+
 {% include 'public/pieces/footer.html' %}
+<script src="{% static 'public/js/index.js' %}"></script>
 </body>
 </html>

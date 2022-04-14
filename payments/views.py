@@ -27,6 +27,7 @@ class PayView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         credentials = AdminSetting.objects.all().first()
+        coins = get_coins_by_user(request)
         if credentials and request.GET.get("amount") and request.GET.get("order_id"):
             liqpay = LiqPay(credentials.liqpay_public_key, credentials.liqpay_private_key)
             params = {
@@ -42,8 +43,8 @@ class PayView(TemplateView):
             }
             signature = liqpay.cnb_signature(params)
             data = liqpay.cnb_data(params)
-            return render(request, self.template_name, {'signature': signature, 'data': data, "title": "pay"})
-        return render(request, self.template_name, {'error': "error", "title": "pay"})
+            return render(request, self.template_name, {'signature': signature, 'data': data, "title": "pay", 'coins': coins})
+        return render(request, self.template_name, {'error': "error", "title": "pay", 'coins': coins})
 
 
 @method_decorator(csrf_exempt, name='dispatch')
