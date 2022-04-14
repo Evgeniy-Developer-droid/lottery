@@ -41,21 +41,30 @@
                                  style='background-image: url("{{ item.thumbnail.url }}")'>
                             </div>
                             <div class="card-body">
-                                <p class="card-text">{{ item.name }}</p>
+                                <p class="card-text h3">{{ item.name }}</p>
+
+                                <div>
+                                    <a href="{% url 'user-detail' item.user.pk %}">{{ item.user.first_name }} {{ item.user.last_name }}</a>
+                                    <span title="complaints" style="margin-left: 5px"><i style="color: red" class="bi bi-emoji-angry-fill"></i> 1</span>
+                                    <span title="rating" style="margin-left: 5px"><i style="color: green" class="bi bi-bar-chart-line-fill"></i> 9.8</span>
+                                </div>
+
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
                                         <a href="{% url 'single' item.pk %}" type="button"
-                                           class="btn btn-sm btn-outline-secondary">View</a>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                           class="btn btn-outline-info">Buy ticket</a>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
+                                    <small class="text-muted">{{ item.finish }}</small>
                                 </div>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
+
             </div>
-            <div class="row">
+
+
+            <div class="row" style="margin-top: 20px">
                 <nav>
                     <ul class="pagination">
                         <input type="hidden" id="count_pages" value="{{ page_obj.paginator.num_pages }}">
