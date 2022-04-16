@@ -21,21 +21,34 @@
                     {{ error }}
                 </div>
             {% else %}
+                <input type="hidden" id="user_id" value="{{ user_data.pk }}">
                 <div class="row gutters-sm">
                     <div class="col-md-4 mb-3">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex flex-column align-items-center text-center">
-                                <div class="img-icon">
-                                    {% if user_data.id == user.id %} <div class="change-avatar"><i class="bi bi-plus-circle-fill"></i></div>    {% endif %}
-                                    <img src="{% if user_data.profile.image %}{{ user_data.profile.image.url }}{% else %}https://bootdey.com/img/Content/avatar/avatar7.png{% endif %}" alt="Admin" class="rounded-circle" width="150">
-                                </div>
+                                    <div class="img-icon">
+                                        {% if user_data.id == user.id %} <div class="change-avatar"><i class="bi bi-plus-circle-fill"></i></div>    {% endif %}
+                                        <img src="{% if user_data.profile.image %}{{ user_data.profile.image.url }}{% else %}https://bootdey.com/img/Content/avatar/avatar7.png{% endif %}" alt="Admin" class="rounded-circle" width="150">
+                                    </div>
 
                                     <div class="mt-3">
                                         <h4>{{ user_data.first_name }} {{ user_data.last_name }}</h4>
-                                        {% if user_data.id != user.id %}
-                                            <button class="btn btn-outline-primary">Message</button>
-                                        {% endif %}
+                                        <div>
+                                            <span title="complaints" style="margin-left: 5px"><i style="color: red" class="bi bi-emoji-angry-fill"></i> {{ user_data.profile.complaints }}</span>
+                                            <span title="rating" style="margin-left: 5px"><i style="color: green" class="bi bi-bar-chart-line-fill"></i> {{ user_data.profile.rating }}</span>
+                                        </div>
+                                        <div class="btn-group">
+                                            {% if user_data.id != user.id %}
+                                                <button class="btn btn-outline-primary">Message</button>
+                                            {% endif %}
+                                            {% if display_rating_button %}
+                                                <button class="btn btn-outline-info" id="estimate">Estimate</button>
+                                            {% endif %}
+                                            {% if display_complain_button %}
+                                                <button class="btn btn-danger" id="complain">Complain</button>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -127,11 +140,11 @@
                                         <h6 class="mb-0">Phone</h6>
                                     </div>
                                     {% if user_data.id == user.id %}
-                                            <div class="col-sm-9 input-group" style="display: none">
-                                                <input type="text" maxlength="255" class="form-control" data-action="phone" value="{{ user_data.profile.phone }}">
-                                                <button class="btn btn-primary btn-save">Save</button>
-                                            </div>
-                                        {% endif %}
+                                        <div class="col-sm-9 input-group" style="display: none">
+                                            <input type="text" maxlength="255" class="form-control" data-action="phone" value="{{ user_data.profile.phone }}">
+                                            <button class="btn btn-primary btn-save">Save</button>
+                                        </div>
+                                    {% endif %}
                                     <div class="col-sm-9 text-secondary">
                                         {{ user_data.profile.phone }}
                                     </div>
@@ -145,7 +158,7 @@
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Address</h6>
                                     </div>
-                                {% if user_data.id == user.id %}
+                                    {% if user_data.id == user.id %}
                                         <div class="col-sm-9 input-group" style="display: none">
                                             <input type="text" maxlength="255" class="form-control" data-action="address" value="{{ user_data.profile.address }}">
                                             <button class="btn btn-primary btn-save">Save</button>
@@ -213,6 +226,34 @@
         </div>
     </div>
 </main>
+
+
+
+{% if display_rating_button %}
+    <div class="modal modal-alert py-5 bg-custom-modal" tabindex="-1" role="dialog" id="modalChoice">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-body p-4 text-center modal-content-wrap">
+                    <div class="form-group">
+                        <button class="btn btn-outline-primary btn-rating">1</button>
+                        <button class="btn btn-outline-primary btn-rating">2</button>
+                        <button class="btn btn-outline-primary btn-rating">3</button>
+                        <button class="btn btn-outline-primary btn-rating">4</button>
+                        <button class="btn btn-outline-primary btn-rating">5</button>
+                        <button class="btn btn-outline-primary btn-rating">6</button>
+                        <button class="btn btn-outline-primary btn-rating">7</button>
+                        <button class="btn btn-outline-primary btn-rating">8</button>
+                        <button class="btn btn-outline-primary btn-rating">9</button>
+                        <button class="btn btn-outline-primary btn-rating">10</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-shadow"></div>
+{% endif %}
+
+
 
 <div class="hidden">
     <input type="file" class="file" id="file" accept="image/*">

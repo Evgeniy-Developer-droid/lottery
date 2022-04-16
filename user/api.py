@@ -3,9 +3,11 @@ import json
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from user.Business.lottery_logic import (
-    define_lottery_winners
+    define_lottery_winners,
+    permission_estimate,
+    permission_complain
 )
-from user.models import Profile
+from user.models import Profile, Rating, Complain
 
 
 def define_winners(request):
@@ -20,7 +22,6 @@ def define_winners(request):
 
 def change_user_avatar(request):
     if request.method == "POST":
-        print(request.FILES)
         profile = Profile.objects.get(user=request.user.pk)
         profile.image = request.FILES.get("file")
         profile.save()
@@ -72,4 +73,32 @@ def change_user_data(request):
         profile.save()
         response['message'] = "Facebook has been updated"
         response['type'] = 'success'
+    return JsonResponse(response)
+
+
+def add_complain(request):
+    response = dict()
+    target = User.objects.get(pk=request.POST.get('user'))
+
+    if permission_complain(request.user, target):
+        Complain(user=target, complainer=request.user).save()
+        response['message'] = "Thank you for complain!"
+        response['type'] = "success"
+    else:
+        response['message'] = "You can`t add complain!"
+        response['type'] = "danger"
+    return JsonResponse(response)
+
+
+def add_estimate(request):
+    response = dict()
+    target = User.objects.get(pk=request.POST.get('user'))
+
+    if permission_estimate(request.user, target):
+        Rating(user=target, ratinger=request.user, value=request.POST.get('value')).save()
+        response['message'] = "Thank you for estimate!"
+        response['type'] = "success"
+    else:
+        response['message'] = "You can`t add estimate!"
+        response['type'] = "danger"
     return JsonResponse(response)

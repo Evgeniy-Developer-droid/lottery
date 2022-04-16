@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from user.models import Profile
 
 
 class Lottery(models.Model):
@@ -42,3 +46,4 @@ class UserReview(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="review_author")
     destination = models.ForeignKey(User, on_delete=models.CASCADE, related_name="review_destination")
     body = models.TextField()
+

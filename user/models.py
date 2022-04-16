@@ -18,6 +18,9 @@ class Profile(models.Model):
     instagram = models.CharField(max_length=255, null=True, blank=True)
     facebook = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(upload_to="avatars", null=True, blank=True)
+    rating = models.FloatField(default=0.0)
+    rating_sum = models.FloatField(default=0.0)
+    complaints = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.username
@@ -31,9 +34,39 @@ class Wallet(models.Model):
         return self.user.username
 
 
+class Complain(models.Model):
+    complainer = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='complainer_comp', null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_comp')
+
+
+class Rating(models.Model):
+    ratinger = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='ratinger_rating', null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_rating')
+    value = models.IntegerField(default=0)
+
+
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
         Wallet.objects.create(user=instance)
     instance.profile.save()
+
+
+@receiver(post_save, sender=Complain)
+def rating(sender, instance, created, **kwargs):
+    if created:
+        criminal = Profile.objects.get(user=instance.user.pk)
+        criminal.complaints += 1
+        criminal.save()
+
+
+@receiver(post_save, sender=Rating)
+def rating(sender, instance, created, **kwargs):
+    if created:
+        target_profile = Profile.objects.get(user=instance.user.pk)
+        all_rat = Rating.objects.filter(user=instance.user.pk).count()
+        result = (target_profile.rating_sum + float(instance.value)) / all_rat
+        target_profile.rating_sum += float(instance.value)
+        target_profile.rating = result
+        target_profile.save()

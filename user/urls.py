@@ -13,4 +13,6 @@ urlpatterns = [
     path('api/define-winners', api.define_winners, name="api-define-winners"),
     path('api/change-user-avatar', api.change_user_avatar, name="api-change-user-avatar"),
     path('api/change-user-data', api.change_user_data, name="api-change-user-data"),
+    path('api/add-complain', api.add_complain, name="api-add-complain"),
+    path('api/add-estimate', api.add_estimate, name="api-add-estimate"),
 ]

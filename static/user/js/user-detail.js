@@ -98,6 +98,73 @@ jQuery(document).ready(function ($){
     })
 
 
+    $('#complain').click(function (){
+        $.ajax({
+            url: '/user/api/add-complain',
+            type: 'POST',
+            data: {user:$("#user_id").val()},
+            beforeSend: function(xhr, settings) {
+                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
+            },
+            success: function(response){
+                if(response.type === "success"){
+                    let m = $("#messages-response")
+                    m.text(response.message)
+                    m.addClass("alert-success");
+                    m.fadeIn()
+                    setTimeout(()=>{
+                        window.location.reload()
+                    }, 1500)
+                }else{
+                    let m = $("#messages-response")
+                    m.text(response.message)
+                    m.removeClass("alert-success")
+                    m.addClass("alert-danger");
+                    m.fadeIn()
+                }
+            },
+        });
+    });
+
+    $('#estimate').click(function (){
+        $("#modalChoice").fadeIn()
+    });
+    $("#modalChoice").click(function (){
+        $(this).fadeOut()
+    })
+    $('.btn-rating').click(function (){
+        $.ajax({
+            url: '/user/api/add-estimate',
+            type: 'POST',
+            data: {user:$("#user_id").val(), value: parseInt($(this).text())},
+            beforeSend: function(xhr, settings) {
+                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
+            },
+            success: function(response){
+                if(response.type === "success"){
+                    let m = $("#messages-response")
+                    m.text(response.message)
+                    m.addClass("alert-success");
+                    m.fadeIn()
+                    setTimeout(()=>{
+                        window.location.reload()
+                    }, 1500)
+                }else{
+                    let m = $("#messages-response")
+                    m.text(response.message)
+                    m.removeClass("alert-success")
+                    m.addClass("alert-danger");
+                    m.fadeIn()
+                }
+            },
+        });
+    })
+
+
 
     function getCookie(name) {
         let cookieValue = null;

@@ -89,8 +89,12 @@ def user_detail(request, pk):
                                                          'user_data': user,
                                                          "title": user.first_name + user.last_name,
                                                          "result": result,
+                                                         "display_rating_button": display_rating_button(request, pk),
+                                                         "display_complain_button": display_complain_button(request, pk),
                                                          "reviews": reviews})
     if user:
         return render(request, 'user/user-detail.html', {'coins': coins, "title": user.first_name + user.last_name,
+                                                         "display_rating_button": display_rating_button(request, pk),
+                                                         "display_complain_button": display_complain_button(request, pk),
                                                          'user_data': user, "reviews": reviews})
     return render(request, 'user/user-detail.html', {'coins': coins, "title": "Not found", 'error': "User doesn`t exist!"})

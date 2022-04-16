@@ -3,7 +3,7 @@ import random
 from django.contrib.auth.models import User
 
 from public.models import Lottery, Ticket
-from user.models import Wallet
+from user.models import Wallet, Rating, Complain
 
 
 def create_lottery(form, request):
@@ -112,3 +112,32 @@ def get_user_by_id(id):
         return User.objects.get(pk=id)
     except User.DoesNotExist:
         return False
+
+
+def permission_estimate(current_user, target_user):
+    rating = Rating.objects.filter(user=target_user.pk, ratinger=current_user.pk)
+    if rating.exists() or (current_user.profile.type_user == "leader" and target_user.profile.type_user == "leader") or current_user.pk == target_user.pk:
+        return False
+    return True
+
+
+def permission_complain(current_user, target_user):
+    complain = Complain.objects.filter(user=target_user.pk, complainer=current_user.pk)
+    print(current_user.profile.type_user == "leader" and target_user.profile.type_user == "leader")
+    if complain.exists() or (current_user.profile.type_user == "leader" and target_user.profile.type_user == "leader") or current_user.pk == target_user.pk:
+        return False
+    return True
+
+
+def display_rating_button(request, target_id):
+    rating = Rating.objects.filter(user=target_id, ratinger=request.user.pk)
+    if rating.exists() or (request.user.profile.type_user == "leader" and User.objects.get(pk=target_id).profile.type_user == "leader") or request.user.pk == target_id:
+        return False
+    return True
+
+
+def display_complain_button(request, target_id):
+    complain = Complain.objects.filter(user=target_id, complainer=request.user.pk)
+    if complain.exists() or (request.user.profile.type_user == "leader" and User.objects.get(pk=target_id).profile.type_user == "leader") or request.user.pk == target_id:
+        return False
+    return True
