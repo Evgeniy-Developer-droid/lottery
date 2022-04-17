@@ -16,4 +16,8 @@ urlpatterns = [
     path('api/change-user-data', api.change_user_data, name="api-change-user-data"),
     path('api/add-complain', api.add_complain, name="api-add-complain"),
     path('api/add-estimate', api.add_estimate, name="api-add-estimate"),
+
+    #messages
+    path('api/get-contacts', api.get_contacts, name="api-get-contacts"),
+    path('api/get-messages', api.get_messages, name="api-get-messages"),
 ]

@@ -1,5 +1,5 @@
 import json
-
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from user.Business.lottery_logic import (
@@ -7,7 +7,7 @@ from user.Business.lottery_logic import (
     permission_estimate,
     permission_complain
 )
-from user.models import Profile, Rating, Complain
+from user.models import Profile, Rating, Complain, Message, RoomUser
 
 
 def define_winners(request):
@@ -102,3 +102,36 @@ def add_estimate(request):
         response['message'] = "You can`t add estimate!"
         response['type'] = "danger"
     return JsonResponse(response)
+
+
+# messages
+
+def get_contacts(request):
+    response = list()
+    rooms = [item.room.pk for item in RoomUser.objects.filter(user=request.user.pk)]
+    companions = RoomUser.objects.filter(room__in=rooms).exclude(user=request.user.pk)
+    for companion in companions:
+        response.append({
+            "user_id": companion.user.pk,
+            "room_id": companion.room.pk,
+            "name": companion.user.first_name + " " + companion.user.last_name,
+            "icon": companion.user.profile.image.url if companion.user.profile.image else "",
+            "new": Message.objects.filter(receiver=request.user.pk, sender=companion.user.pk, read=False).count()
+        })
+    return JsonResponse(response, safe=False)
+
+
+@csrf_exempt
+def get_messages(request):
+    response = list()
+    messages = Message.objects.filter(room=request.POST.get('room'))
+    for message in messages:
+        response.append({
+            "timestamp": message.timestamp,
+            "name": message.sender.first_name + " " + message.sender.last_name,
+            "icon": message.sender.profile.image.url if message.sender.profile.image else "",
+            "body": message.body
+        })
+    return JsonResponse(response, safe=False)
+
+# ========
