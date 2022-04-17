@@ -45,6 +45,17 @@ class Rating(models.Model):
     value = models.IntegerField(default=0)
 
 
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender_message')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver_message')
+    read = models.BooleanField(default=False)
+
+
+class MessageBody(models.Model):
+    message = models.OneToOneField(Message, on_delete=models.CASCADE)
+    body = models.TextField()
+
+
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:

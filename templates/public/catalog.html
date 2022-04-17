@@ -14,20 +14,18 @@
 {% include 'public/pieces/header.html' %}
 <main>
 
-    <section class="py-5 text-center container">
-        <div class="row py-lg-5">
-            <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Album example</h1>
-                <p class="lead text-muted">Something short and leading about the collection below—its contents, the
-                    creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it
-                    entirely.</p>
-                <p>
-                    <a href="#" class="btn btn-primary my-2">Main call to action</a>
-                    <a href="#" class="btn btn-secondary my-2">Secondary action</a>
-                </p>
+    <div class="container py-5">
+        <form>
+            <div class="form-row align-items-center d-flex">
+                <div class="col-3">
+                    <input type="text" name="name" class="form-control mb-2" id="inlineFormInput" placeholder="Title">
+                </div>
+                <div class="col-3">
+                    <button type="submit" class="btn btn-primary mb-2">Search</button>
+                </div>
             </div>
-        </div>
-    </section>
+        </form>
+    </div>
 
     <div class="album py-5 bg-light">
         <div class="container">

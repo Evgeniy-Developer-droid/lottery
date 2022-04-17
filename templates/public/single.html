@@ -49,17 +49,23 @@
                                 {{ item.name }}
                             </h4>
                             <p>{{ item.description }}</p>
+                        <div class="product_meta">
+                            <strong>Status: </strong><span style="display: inline">{{ item.status }}</span>
+                        </div>
                             <div class="product_meta">
                                 {#                                <span class="posted_in"> <strong>Categories:</strong> <a rel="tag" href="#">Jackets</a>, <a rel="tag" href="#">Men</a>, <a rel="tag" href="#">Shirts</a>, <a rel="tag" href="#">T-shirt</a>.</span>#}
                                 {#                                <span class="tagged_as"><strong>Tags:</strong> <a rel="tag" href="#">mens</a>, <a rel="tag" href="#">womens</a>.</span>#}
                                 <span class="winners">
-                                    <strong>Winners:</strong>
-                                    <a rel="tag" style="color: #009688" href="#">11 ticket</a>,
-                                    <a rel="tag" style="color: #009688" href="#">33 ticket</a>.
+                                    <strong>Winners:</strong><br>
+                                    {% for winner in winners %}
+                                        <a rel="tag" style="color: #009688" href="{% url 'user-detail' winner.user.pk %}">{{ winner.number }} ticket</a><br>
+                                    {% endfor %}
                                 </span>
                             </div>
-                            <div class="m-bot15"><strong>Author : </strong>
-                                <span class="pro-price">{{ item.user.first_name }} {{ item.user.last_name }}</span>
+                            <div class="product_meta" style="display: flex"><strong>Author: </strong>
+                                <a href="{% url 'user-detail' item.user.pk %}">{{ item.user.first_name }} {{ item.user.last_name }}</a>
+                                <span title="complaints" style="margin-left: 5px"><i style="color: red" class="bi bi-emoji-angry-fill"></i> {{ item.user.profile.complaints }}</span>
+                                <span title="rating" style="margin-left: 5px"><i style="color: green" class="bi bi-bar-chart-line-fill"></i> {{ item.user.profile.rating }}</span>
                             </div>
                             <div class="m-bot15"><strong>Created lottery : </strong>
                                 <span class="pro-price" style="color: #5983fc"> {{ item.start }}</span>

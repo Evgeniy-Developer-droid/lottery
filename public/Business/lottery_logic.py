@@ -35,3 +35,7 @@ def post_review(request, pk):
         UserReview(author=request.user, destination=User.objects.get(pk=pk), body=body).save()
         return {"message": "Create review successful.", "type": "success"}
     return {"message": "Field of review is empty.", "type": "warning"}
+
+
+def get_winners_single(pk):
+    return Ticket.objects.filter(lottery=pk, status='win')

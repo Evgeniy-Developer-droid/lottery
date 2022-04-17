@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from public.forms import SignUpForm, LoginForm
-from public.Business.lottery_logic import get_lotterys_for_catalog, get_lottery_by_id, get_tickets_meta
+from public.Business.lottery_logic import get_lotterys_for_catalog, get_lottery_by_id, get_tickets_meta, get_winners_single
 from user.Business.lottery_logic import get_coins_by_user
 
 
@@ -68,5 +68,7 @@ def single(request, pk):
     item = get_lottery_by_id(pk)
     if item:
         tickets_meta = get_tickets_meta(pk)
-        return render(request, 'public/single.html', {'item': item, "title": item.name, 'tickets_meta': tickets_meta, 'coins':coins})
-    return render(request, 'public/single.html', {'message': 'Lottery not found', "title": "Ticket", 'coins':coins})
+        winners = get_winners_single(pk)
+        return render(request, 'public/single.html', {'item': item, "winners": winners, "title": item.name,
+                                                      'tickets_meta': tickets_meta, 'coins': coins})
+    return render(request, 'public/single.html', {'message': 'Lottery not found', "title": "Ticket", 'coins': coins})

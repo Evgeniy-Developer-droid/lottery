@@ -24,7 +24,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">Notifications</a></li>
-                            <li><a class="dropdown-item" href="#">Messages</a></li>
+                            <li><a class="dropdown-item" href="{% url 'messages' %}">Messages</a></li>
                             <li><hr class="dropdown-divider"></li>
                             {% if user.profile.type_user == "player" %}<li><a class="dropdown-item" href="{% url 'tickets' %}">Tickets</a></li>{% endif %}
                             {% if user.profile.type_user == "leader" %}<li><a class="dropdown-item" href="{% url 'user-catalog' %}">My Catalog</a></li>{% endif %}
