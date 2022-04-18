@@ -7,7 +7,7 @@ from user.Business.lottery_logic import (
     permission_estimate,
     permission_complain
 )
-from user.models import Profile, Rating, Complain, Message, RoomUser
+from user.models import Profile, Rating, Complain, Message, RoomUser, Room
 
 
 def define_winners(request):
@@ -121,17 +121,41 @@ def get_contacts(request):
     return JsonResponse(response, safe=False)
 
 
-@csrf_exempt
 def get_messages(request):
-    response = list()
+    response = {'messages':[]}
+    companion = RoomUser.objects.filter(room=request.POST.get('room')).exclude(user=request.user.pk)
+    if companion.exists():
+        companion = companion.first()
+        response['companion'] = dict()
+        response['companion']['name'] = companion.user.first_name + " " + companion.user.last_name
+        response['companion']['user_id'] = companion.user.pk
+        response['companion']['icon'] = companion.user.profile.image.url if companion.user.profile.image else ""
     messages = Message.objects.filter(room=request.POST.get('room'))
     for message in messages:
-        response.append({
+        response['messages'].append({
             "timestamp": message.timestamp,
             "name": message.sender.first_name + " " + message.sender.last_name,
+            "user_id": message.sender.pk,
             "icon": message.sender.profile.image.url if message.sender.profile.image else "",
             "body": message.body
         })
-    return JsonResponse(response, safe=False)
+    return JsonResponse(response)
 
+
+def post_message(request):
+    body = request.POST.get('body', "")
+    receiver = User.objects.get(pk=request.POST.get('receiver', ""))
+    room = Room.objects.get(pk=request.POST.get('room', ""))
+    if body:
+        mess = Message(sender=request.user, receiver=receiver, body=body, room=room)
+        mess.save()
+        data = {
+            "timestamp": mess.timestamp,
+            "name": mess.sender.first_name + " " + mess.sender.last_name,
+            "user_id": mess.sender.pk,
+            "icon": mess.sender.profile.image.url if mess.sender.profile.image else "",
+            "body": mess.body
+        }
+        return JsonResponse({'message':'OK', "type":"success", "data": data})
+    return JsonResponse({'message': 'Failed', "type": "error"})
 # ========

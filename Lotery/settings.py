@@ -18,7 +18,8 @@ INSTALLED_APPS = [
     'public',
     'user',
     'api',
-    'payments'
+    'payments',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,16 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Lotery.wsgi.application'
+# WSGI_APPLICATION = 'Lotery.wsgi.application'
+ASGI_APPLICATION = "Lotery.asgi.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 DATABASES = {
     'default': {

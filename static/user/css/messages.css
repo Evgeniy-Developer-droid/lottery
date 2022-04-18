@@ -9,7 +9,7 @@
 .chat-messages {
     display: flex;
     flex-direction: column;
-    max-height: 630px;
+    height: 630px;
     overflow-y: scroll
 }
 
@@ -40,4 +40,23 @@
 }
 .border-top {
     border-top: 1px solid #dee2e6!important;
+}
+.badge {
+    position: absolute;
+    right: 10px;
+    bottom: 30%;
+}
+#contacts {
+        border-right: 1px #dee2e6 solid;
+}
+.contact{
+    background: aliceblue;
+    margin-top: 5px;
+}
+.contact:hover{
+    background: #8b8b8b;
+}
+
+#user-meta{
+    min-height: 65px;
 }
