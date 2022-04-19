@@ -3,16 +3,37 @@ jQuery(document).ready(function ($){
     let connection = null;
 
 
+    const readMessages = (room) => {
+        const data = {room:room}
+        $.ajax({
+            url: '/user/api/read-messages',
+            type: 'POST',
+            data: data,
+            beforeSend: function(xhr, settings) {
+                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
+            },
+            success: function(response){
+                if(response.type === "success"){
+                    let links = $("#contacts").find(`[data-room='${room}']`);
+                    links.children(".badge").text(0);
+                }
+            },
+        });
+    }
+
+
 
     const startSocket = (room) => {
-          const chatSocket = new WebSocket(
+        const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
             + '/ws/chat/'
             + room
             + '/'
         );
-          return chatSocket
+        return chatSocket
     }
 
 
@@ -50,7 +71,8 @@ jQuery(document).ready(function ($){
                     </div>
                 </div>`)
             }
-            $('.chat-messages').animate({ scrollTop: $(document).height() }, 1000);
+            $('.chat-messages').animate({ scrollTop: $('.chat-messages')[0].scrollHeight }, 1000);
+            readMessages(room)
         };
         connection.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
@@ -120,6 +142,7 @@ jQuery(document).ready(function ($){
             connection.close()
         }
         let room = $(this).data('room')
+        readMessages(room)
         $('#companion').val($(this).data('user'))
         $('#room').val($(this).data('room'))
         newConnection(room);
@@ -177,7 +200,7 @@ jQuery(document).ready(function ($){
                     }
                 })
 
-                $('.chat-messages').animate({ scrollTop: $(document).height() }, 1000);
+                $('.chat-messages').animate({ scrollTop: $('.chat-messages')[0].scrollHeight }, 1000);
 
             },
         });

@@ -80,7 +80,8 @@ def settings(request):
 
 @login_required(login_url='/signin/')
 def messages(request):
-    return render(request, "user/messages.html", {})
+    coins = get_coins_by_user(request)
+    return render(request, "user/messages.html", {'coins': coins})
 
 
 @login_required(login_url='/signin/')

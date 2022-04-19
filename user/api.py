@@ -158,4 +158,12 @@ def post_message(request):
         }
         return JsonResponse({'message':'OK', "type":"success", "data": data})
     return JsonResponse({'message': 'Failed', "type": "error"})
+
+
+def read_messages(request):
+    room = int(request.POST.get('room', 0))
+    messages = Message.objects.filter(receiver=request.user.pk, room=room, read=False)
+    if messages.exists():
+        messages.update(read=True)
+    return JsonResponse({'message': "OK", 'type': "success"})
 # ========

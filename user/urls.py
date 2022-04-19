@@ -21,4 +21,5 @@ urlpatterns = [
     path('api/get-contacts', api.get_contacts, name="api-get-contacts"),
     path('api/get-messages', api.get_messages, name="api-get-messages"),
     path('api/post-message', api.post_message, name="api-post-message"),
+    path('api/read-messages', api.read_messages, name="api-read-messages"),
 ]
