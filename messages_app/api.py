@@ -9,7 +9,7 @@ from messages_app.models import RoomUser, Message, Room
 def get_contacts(request):
     response = list()
     rooms = [item.room.pk for item in RoomUser.objects.filter(user=request.user.pk)]
-    companions = RoomUser.objects.filter(room__in=rooms).exclude(user=request.user.pk)
+    companions = RoomUser.objects.filter(room__in=rooms).exclude(user=request.user.pk)[::-1]
     for companion in companions:
         response.append({
             "user_id": companion.user.pk,
@@ -105,4 +105,3 @@ def create_dialog(request):
     RoomUser(user=request.user, room=room).save()
     return JsonResponse({"url": reverse("messages") + "?dialog=" + str(room.pk)})
 
-# ========

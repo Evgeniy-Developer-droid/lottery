@@ -129,8 +129,8 @@ jQuery(document).ready(function ($){
             success: function(response){
                 response.forEach((val, index)=>{
                     let icon = val.icon ? val.icon : "https://bootdey.com/img/Content/avatar/avatar7.png"
-                    $('#contacts').append(`<a href="#" data-room="${val.room_id}" data-user="${val.user_id}" 
-                            class="list-group-item list-group-item-action border-0 contact">
+                    let html = `<a href="#" data-room="${val.room_id}" data-user="${val.user_id}" 
+                            class="list-group-item list-group-item-action border-0 contact ${ val.new !== 0 ? "not-read" : "" }">
                             <div class="badge bg-success float-right">${val.new}</div>
                             <div class="d-flex align-items-start">
                             <img src="${icon}" class="rounded-circle mr-1" alt="${val.name}" width="40" height="40">
@@ -138,7 +138,10 @@ jQuery(document).ready(function ($){
                                 ${val.name}
                                 </div>
                             </div>
-                        </a>`)
+                        </a>`
+                    if(val.new !== 0){
+                        $('#contacts').prepend(html)
+                    }else {$('#contacts').append(html)}
 
                     if(dialog){
                         let room_click = $("#contacts").find(`[data-room='${dialog}']`);
@@ -156,8 +159,15 @@ jQuery(document).ready(function ($){
         if(connection){
             connection.close()
         }
-        let room = $(this).data('room')
-        $(this).css('background', 'aliceblue')
+        let room = $(this).data('room');
+
+        $('.contact').each(function (){
+            $(this).removeClass('select')
+        })
+
+        $(this).removeClass('not-read');
+        $(this).addClass('select');
+
         readMessages(room)
         $('#companion').val($(this).data('user'))
         $('#room').val($(this).data('room'))

@@ -53,6 +53,12 @@
     background: aliceblue;
     margin-top: 5px;
 }
+.select{
+    background: #a1b6c9 !important;
+}
+.not-read{
+    background: #fc6d6d !important;
+}
 .contact:hover{
     background: #8b8b8b;
 }
