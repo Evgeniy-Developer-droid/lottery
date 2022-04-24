@@ -21,7 +21,7 @@
                     {{ error }}
                 </div>
             {% else %}
-                <input type="hidden" id="user_id" value="{{ user_data.pk }}">
+                <input type="hidden" id="target_user" value="{{ user_data.pk }}">
                 <div class="row gutters-sm">
                     <div class="col-md-4 mb-3">
                         <div class="card">
@@ -40,7 +40,7 @@
                                         </div>
                                         <div class="btn-group">
                                             {% if user_data.id != user.id %}
-                                                <button class="btn btn-outline-primary">Message</button>
+                                                <button class="btn btn-outline-primary" id="new-message">Message</button>
                                             {% endif %}
                                             {% if display_rating_button %}
                                                 <button class="btn btn-outline-info" id="estimate">Estimate</button>

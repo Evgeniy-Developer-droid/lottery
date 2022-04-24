@@ -79,12 +79,6 @@ def settings(request):
 
 
 @login_required(login_url='/signin/')
-def messages(request):
-    coins = get_coins_by_user(request)
-    return render(request, "user/messages.html", {'coins': coins})
-
-
-@login_required(login_url='/signin/')
 def user_detail(request, pk):
     coins = get_coins_by_user(request)
     user = get_user_by_id(pk)

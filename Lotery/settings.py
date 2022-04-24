@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'api',
     'payments',
     'channels',
+    'messages_app'
 ]
 
 MIDDLEWARE = [

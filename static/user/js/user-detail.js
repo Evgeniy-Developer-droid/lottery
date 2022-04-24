@@ -102,7 +102,7 @@ jQuery(document).ready(function ($){
         $.ajax({
             url: '/user/api/add-complain',
             type: 'POST',
-            data: {user:$("#user_id").val()},
+            data: {user:$("#target_user").val()},
             beforeSend: function(xhr, settings) {
                 if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
                     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
@@ -138,7 +138,7 @@ jQuery(document).ready(function ($){
         $.ajax({
             url: '/user/api/add-estimate',
             type: 'POST',
-            data: {user:$("#user_id").val(), value: parseInt($(this).text())},
+            data: {user:$("#target_user").val(), value: parseInt($(this).text())},
             beforeSend: function(xhr, settings) {
                 if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
                     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
@@ -154,6 +154,31 @@ jQuery(document).ready(function ($){
                         window.location.reload()
                     }, 1500)
                 }else{
+                    let m = $("#messages-response")
+                    m.text(response.message)
+                    m.removeClass("alert-success")
+                    m.addClass("alert-danger");
+                    m.fadeIn()
+                }
+            },
+        });
+    })
+
+
+    $("#new-message").click(function (){
+        $.ajax({
+            url: '/messages/api/create-dialog',
+            type: 'POST',
+            data: {receiver:$('#target_user').val()},
+            beforeSend: function(xhr, settings) {
+                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
+            },
+            success: function(response){
+                if('url' in response){
+                    window.location.href = response.url;
+                } else {
                     let m = $("#messages-response")
                     m.text(response.message)
                     m.removeClass("alert-success")

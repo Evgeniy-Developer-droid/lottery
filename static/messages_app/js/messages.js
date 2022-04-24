@@ -3,10 +3,18 @@ jQuery(document).ready(function ($){
     let connection = null;
 
 
+
+
+    let url = new URL(window.location.href);
+    let dialog = url.searchParams.get("dialog");
+
+
+
+
     const readMessages = (room) => {
         const data = {room:room}
         $.ajax({
-            url: '/user/api/read-messages',
+            url: '/messages/api/read-messages',
             type: 'POST',
             data: data,
             beforeSend: function(xhr, settings) {
@@ -90,7 +98,7 @@ jQuery(document).ready(function ($){
         }
         $('#input-send').val("")
         $.ajax({
-            url: '/user/api/post-message',
+            url: '/messages/api/post-message',
             type: 'POST',
             data: data,
             beforeSend: function(xhr, settings) {
@@ -110,7 +118,7 @@ jQuery(document).ready(function ($){
 
     const initMessages = () => {
         $.ajax({
-            url: '/user/api/get-contacts',
+            url: '/messages/api/get-contacts',
             type: 'POST',
             data: {},
             beforeSend: function(xhr, settings) {
@@ -131,6 +139,13 @@ jQuery(document).ready(function ($){
                                 </div>
                             </div>
                         </a>`)
+
+                    if(dialog){
+                        let room_click = $("#contacts").find(`[data-room='${dialog}']`);
+                        if(room_click){
+                            room_click.click();
+                        }
+                    }
                 })
             },
         });
@@ -142,12 +157,13 @@ jQuery(document).ready(function ($){
             connection.close()
         }
         let room = $(this).data('room')
+        $(this).css('background', 'aliceblue')
         readMessages(room)
         $('#companion').val($(this).data('user'))
         $('#room').val($(this).data('room'))
         newConnection(room);
         $.ajax({
-            url: '/user/api/get-messages',
+            url: '/messages/api/get-messages',
             type: 'POST',
             data: {'room':room},
             beforeSend: function(xhr, settings) {

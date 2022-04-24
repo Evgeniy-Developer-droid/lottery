@@ -7,7 +7,7 @@ from user.Business.lottery_logic import (
     permission_estimate,
     permission_complain
 )
-from user.models import Profile, Rating, Complain, Message, RoomUser, Room
+from user.models import Profile, Rating, Complain
 
 
 def define_winners(request):
@@ -102,68 +102,3 @@ def add_estimate(request):
         response['message'] = "You can`t add estimate!"
         response['type'] = "danger"
     return JsonResponse(response)
-
-
-# messages
-
-def get_contacts(request):
-    response = list()
-    rooms = [item.room.pk for item in RoomUser.objects.filter(user=request.user.pk)]
-    companions = RoomUser.objects.filter(room__in=rooms).exclude(user=request.user.pk)
-    for companion in companions:
-        response.append({
-            "user_id": companion.user.pk,
-            "room_id": companion.room.pk,
-            "name": companion.user.first_name + " " + companion.user.last_name,
-            "icon": companion.user.profile.image.url if companion.user.profile.image else "",
-            "new": Message.objects.filter(receiver=request.user.pk, sender=companion.user.pk, read=False).count()
-        })
-    return JsonResponse(response, safe=False)
-
-
-def get_messages(request):
-    response = {'messages':[]}
-    companion = RoomUser.objects.filter(room=request.POST.get('room')).exclude(user=request.user.pk)
-    if companion.exists():
-        companion = companion.first()
-        response['companion'] = dict()
-        response['companion']['name'] = companion.user.first_name + " " + companion.user.last_name
-        response['companion']['user_id'] = companion.user.pk
-        response['companion']['icon'] = companion.user.profile.image.url if companion.user.profile.image else ""
-    messages = Message.objects.filter(room=request.POST.get('room'))
-    for message in messages:
-        response['messages'].append({
-            "timestamp": message.timestamp,
-            "name": message.sender.first_name + " " + message.sender.last_name,
-            "user_id": message.sender.pk,
-            "icon": message.sender.profile.image.url if message.sender.profile.image else "",
-            "body": message.body
-        })
-    return JsonResponse(response)
-
-
-def post_message(request):
-    body = request.POST.get('body', "")
-    receiver = User.objects.get(pk=request.POST.get('receiver', ""))
-    room = Room.objects.get(pk=request.POST.get('room', ""))
-    if body:
-        mess = Message(sender=request.user, receiver=receiver, body=body, room=room)
-        mess.save()
-        data = {
-            "timestamp": mess.timestamp,
-            "name": mess.sender.first_name + " " + mess.sender.last_name,
-            "user_id": mess.sender.pk,
-            "icon": mess.sender.profile.image.url if mess.sender.profile.image else "",
-            "body": mess.body
-        }
-        return JsonResponse({'message':'OK', "type":"success", "data": data})
-    return JsonResponse({'message': 'Failed', "type": "error"})
-
-
-def read_messages(request):
-    room = int(request.POST.get('room', 0))
-    messages = Message.objects.filter(receiver=request.user.pk, room=room, read=False)
-    if messages.exists():
-        messages.update(read=True)
-    return JsonResponse({'message': "OK", 'type': "success"})
-# ========
