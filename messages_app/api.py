@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.urls import reverse
 from messages_app.models import RoomUser, Message, Room
+from django.templatetags.static import static
 
 
 def get_contacts(request):
@@ -15,7 +16,7 @@ def get_contacts(request):
             "user_id": companion.user.pk,
             "room_id": companion.room.pk,
             "name": companion.user.first_name + " " + companion.user.last_name,
-            "icon": companion.user.profile.image.url if companion.user.profile.image else "",
+            "icon": companion.user.profile.image.url if companion.user.profile.image else static('public/img/default-user-icon.jpg'),
             "new": Message.objects.filter(receiver=request.user.pk, sender=companion.user.pk, read=False).count()
         })
     return JsonResponse(response, safe=False)
@@ -29,14 +30,14 @@ def get_messages(request):
         response['companion'] = dict()
         response['companion']['name'] = companion.user.first_name + " " + companion.user.last_name
         response['companion']['user_id'] = companion.user.pk
-        response['companion']['icon'] = companion.user.profile.image.url if companion.user.profile.image else ""
+        response['companion']['icon'] = companion.user.profile.image.url if companion.user.profile.image else static('public/img/default-user-icon.jpg')
     messages = Message.objects.filter(room=request.POST.get('room'))
     for message in messages:
         response['messages'].append({
             "timestamp": message.timestamp,
             "name": message.sender.first_name + " " + message.sender.last_name,
             "user_id": message.sender.pk,
-            "icon": message.sender.profile.image.url if message.sender.profile.image else "",
+            "icon": message.sender.profile.image.url if message.sender.profile.image else static('public/img/default-user-icon.jpg'),
             "body": message.body
         })
     return JsonResponse(response)
@@ -53,7 +54,7 @@ def post_message(request):
             "timestamp": mess.timestamp,
             "name": mess.sender.first_name + " " + mess.sender.last_name,
             "user_id": mess.sender.pk,
-            "icon": mess.sender.profile.image.url if mess.sender.profile.image else "",
+            "icon": mess.sender.profile.image.url if mess.sender.profile.image else static('public/img/default-user-icon.jpg'),
             "body": mess.body
         }
         layer = get_channel_layer()
@@ -64,7 +65,7 @@ def post_message(request):
                 'room': room.pk,
                 "name": mess.sender.first_name + " " + mess.sender.last_name,
                 "user_id": mess.sender.pk,
-                "icon": mess.sender.profile.image.url if mess.sender.profile.image else "",
+                "icon": mess.sender.profile.image.url if mess.sender.profile.image else static('public/img/default-user-icon.jpg'),
                 "body": mess.body
             }
         })

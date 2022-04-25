@@ -94,7 +94,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
-# STATIC_ROOT = BASE_DIR / "static/"
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
@@ -103,6 +103,14 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_CONFIRM = False
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'evgeniy.python.developer@gmail.com'
+EMAIL_HOST_PASSWORD = 'iemmevdatpsepdxr'
+EMAIL_PORT = 587
+
 
 
 # docker run -p 6379:6379 -d redis:5

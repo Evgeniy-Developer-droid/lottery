@@ -11,7 +11,7 @@ jQuery(document).ready(function ($){
 
 
     //=================
-    $('#new-mess-icon').css('background', 'red')
+    $('#new-mess-icon').css('background', 'white')
     $('#drop-dawn').removeClass('btn-danger')
     $('#drop-dawn').addClass('btn-warning')
     localStorage.setItem('new-message', 0);
@@ -56,7 +56,7 @@ jQuery(document).ready(function ($){
         connection = startSocket(room);
         connection.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            let icon = data.message.icon ? data.message.icon : "https://bootdey.com/img/Content/avatar/avatar7.png"
+            let icon = data.message.icon ? data.message.icon : "/static/public/img/default-user-icon.jpg"
             let date = data.message.timestamp.split('T')[0];
             let time = data.message.timestamp.split('T')[1].split(".")[0]
             let timestamp = date+" "+time;
@@ -135,7 +135,7 @@ jQuery(document).ready(function ($){
             },
             success: function(response){
                 response.forEach((val, index)=>{
-                    let icon = val.icon ? val.icon : "https://bootdey.com/img/Content/avatar/avatar7.png"
+                    let icon = val.icon ? val.icon : "/static/public/img/default-user-icon.jpg"
                     let html = `<a href="#" data-room="${val.room_id}" data-user="${val.user_id}" 
                             class="list-group-item list-group-item-action border-0 contact ${ val.new !== 0 ? "not-read" : "" }">
                             <div class="badge bg-success float-right">${val.new}</div>
@@ -190,7 +190,7 @@ jQuery(document).ready(function ($){
             },
             success: function(response){
                 $('.chat-messages').empty();
-                let icon_meta = response.companion.icon ? response.companion.icon : "https://bootdey.com/img/Content/avatar/avatar7.png"
+                let icon_meta = response.companion.icon ? response.companion.icon : "/static/public/img/default-user-icon.jpg"
                 $('#user-meta').html(`<div class="d-flex align-items-center py-1">
                     <div class="position-relative">
                         <img src="${icon_meta}" class="rounded-circle mr-1" width="40" height="40">
@@ -201,7 +201,7 @@ jQuery(document).ready(function ($){
                 </div>`)
 
                 response.messages.forEach((val, index)=>{
-                    let icon = val.icon ? val.icon : "https://bootdey.com/img/Content/avatar/avatar7.png"
+                    let icon = val.icon ? val.icon : "/static/public/img/default-user-icon.jpg"
                     let date = val.timestamp.split('T')[0];
                     let time = val.timestamp.split('T')[1].split(".")[0]
                     let timestamp = date+" "+time;
