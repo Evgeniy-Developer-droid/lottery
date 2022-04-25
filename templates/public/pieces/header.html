@@ -1,5 +1,6 @@
 {% load static %}
 <input type="hidden" id="user_id" value="{{ user.pk }}">
+<input type="hidden" id="notification-soung" value="{% static 'messages_app/source/notify.wav' %}">
 <header class="p-3 bg-dark text-white">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -20,12 +21,12 @@
                 {% if user.is_authenticated %}
                     <div class="btn-group">
                         <a href='{% url "user-detail" user.pk %}' class="btn btn-warning">Profile</a>
-                        <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" id="drop-dawn" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Notifications</a></li>
-                            <li><a class="dropdown-item" href="{% url 'messages' %}">Messages</a></li>
+{#                            <li><a class="dropdown-item" href="#">Notifications</a></li>#}
+                            <li><a class="dropdown-item" href="{% url 'messages' %}">Messages <span id="new-mess-icon"></span></a></li>
                             <li><hr class="dropdown-divider"></li>
                             {% if user.profile.type_user == "player" %}<li><a class="dropdown-item" href="{% url 'tickets' %}">Tickets</a></li>{% endif %}
                             {% if user.profile.type_user == "leader" %}<li><a class="dropdown-item" href="{% url 'user-catalog' %}">My Catalog</a></li>{% endif %}
@@ -34,7 +35,7 @@
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href='{% url "logout" %}'>Log out</a></li>
                         </ul>
-                        <a class="btn btn-light" style="margin-left: 5px" href="{% url 'replenish_the_balance' %}">Coins: {{ coins }}.00</a>
+                        <a class="btn btn-light" style="margin-left: 5px" href="{% url 'replenish_the_balance' %}">$ {{ coins }}.00</a>
                     </div>
                 {% else %}
                     <a href='{% url "signin" %}' class="btn btn-outline-light me-2">Sign in</a>
@@ -44,3 +45,13 @@
         </div>
     </div>
 </header>
+
+<style>
+    #new-mess-icon {
+    border: 1px solid black;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+</style>

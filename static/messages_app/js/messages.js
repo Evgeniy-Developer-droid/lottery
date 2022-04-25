@@ -10,6 +10,13 @@ jQuery(document).ready(function ($){
 
 
 
+    //=================
+    $('#new-mess-icon').css('background', 'red')
+    $('#drop-dawn').removeClass('btn-danger')
+    $('#drop-dawn').addClass('btn-warning')
+    localStorage.setItem('new-message', 0);
+    //=================
+
 
     const readMessages = (room) => {
         const data = {room:room}

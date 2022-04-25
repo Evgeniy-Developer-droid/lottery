@@ -4,7 +4,7 @@ from public.models import Lottery, Ticket, UserReview
 
 
 def get_lotterys_for_catalog():
-    lotterys = Lottery.objects.all()
+    lotterys = Lottery.objects.filter(status='active')[::-1]
     return lotterys
 
 

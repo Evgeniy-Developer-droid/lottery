@@ -3,6 +3,7 @@ jQuery(document).ready(function ($){
     let user_id = $('#user_id').val();
     let socket = null;
 
+
     if(user_id){
         socket = new WebSocket(
             'ws://'
@@ -17,7 +18,8 @@ jQuery(document).ready(function ($){
 
             if(data.content.type === 'message'){
                 let contacts = $('#contacts')
-                if(contacts){
+
+                if(contacts.length){
                     let room = contacts.find(`[data-room='${data.content.room}']`);
                     if(room.length === 0){
                         let icon = data.content.icon ? data.content.icon : "https://bootdey.com/img/Content/avatar/avatar7.png"
@@ -38,11 +40,29 @@ jQuery(document).ready(function ($){
                             room.addClass('not-read')
                         }
                     }
+                }else{
+                    $('#new-mess-icon').css('background', 'red');
+                    $('#drop-dawn').removeClass('btn-warning');
+                    $('#drop-dawn').addClass('btn-danger');
+                    localStorage.setItem('new-message', 1);
+                    playSound($('#notification-soung').val())
                 }
             }
         }
 
 
+    }
+
+    if(parseInt(localStorage.getItem('new-message')) === 1){
+        $('#new-mess-icon').css('background', 'red');
+        $('#drop-dawn').removeClass('btn-warning');
+        $('#drop-dawn').addClass('btn-danger');
+    }
+
+
+    function playSound(url) {
+        const audio = new Audio(url);
+        audio.play();
     }
 
 
