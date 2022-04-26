@@ -1,10 +1,19 @@
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import NewLotteryForm
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.contrib.auth import logout
+
+from .forms import NewLotteryForm, EmailForm, ResetPasswordForm
 from user.Business.lottery_logic import *
 from public.Business.lottery_logic import get_tickets_meta, get_reviews_by_user_id, post_review
 from user.Business.lottery_logic import get_winners
+from .token import account_activation_token
 
 
 @login_required(login_url='/signin/')
@@ -73,7 +82,7 @@ def view_lottery(request, pk):
 
 
 @login_required(login_url='/signin/')
-def settings(request):
+def settings_(request):
     coins = get_coins_by_user(request)
     return render(request, 'user/settings.html', {'coins': coins, "title": "Settings"})
 
@@ -98,3 +107,75 @@ def user_detail(request, pk):
                                                          "display_complain_button": display_complain_button(request, pk),
                                                          'user_data': user, "reviews": reviews})
     return render(request, 'user/user-detail.html', {'coins': coins, "title": "Not found", 'error': "User doesn`t exist!"})
+
+
+def password_reset(request):
+    coins = get_coins_by_user(request)
+    if request.method == "POST":
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            if settings.EMAIL_CONFIRM:
+                current_site = get_current_site(request)
+                mail_subject = 'Activation link has been sent to your email id'
+                try:
+                    user = User.objects.get(email=form.cleaned_data.get('email'))
+                    message = render_to_string('user/emails/password_reset_email.html', {
+                        'user': user,
+                        'domain': current_site.domain,
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token': account_activation_token.make_token(user),
+                    })
+                    to_email = form.cleaned_data.get('email')
+                    email = EmailMessage(
+                        mail_subject, message, to=[to_email]
+                    )
+                    email.send()
+                    return redirect('password-reset-done')
+                except User.DoesNotExist:
+                    form = EmailForm()
+                    return render(request, 'user/password_reset_form.html',
+                                  {'coins': coins, "title": "Change password", 'form': form,
+                                   'error': 'User with this email not found!'})
+    form = EmailForm()
+    return render(request, 'user/password_reset_form.html', {'coins': coins, "title": "Change password", 'form': form})
+
+
+def password_reset_done(request):
+    coins = get_coins_by_user(request)
+    return render(request, 'user/password_reset_done.html', {'coins': coins, "title": "Done"})
+
+
+def password_reset_complete(request):
+    coins = get_coins_by_user(request)
+    return render(request, 'user/password_reset_complete.html', {'coins': coins, "title": "Done"})
+
+
+def password_reset_confirm(request, uidb64, token):
+    coins = get_coins_by_user(request)
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        error = ""
+        if request.method == 'POST':
+            form = ResetPasswordForm(request.POST)
+            if form.is_valid():
+                pass1 = form.cleaned_data.get('password1', "")
+                pass2 = form.cleaned_data.get('password2', "")
+                if pass1 == pass2:
+                    logout(request)
+                    user.set_password(pass1)
+                    user.save()
+                    return redirect('password-reset-complete')
+                else:
+                    error = "Password not same"
+        form = ResetPasswordForm()
+        return render(request, 'user/password_reset_confirm.html', {'coins': coins,
+                                                                    'form': form,
+                                                                    'error': error,
+                                                                    'validlink': True,
+                                                                    "title": "Confirm"})
+    else:
+        return render(request, 'user/password_reset_confirm.html', {'coins': coins, "title": "Confirm"})
