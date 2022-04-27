@@ -17,34 +17,35 @@
         <div class="row">
             <table class="table">
                 <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Thumbnail</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Count tickets</th>
-                        <th scope="col">Price tickets</th>
-                        <th scope="col">Start lottery</th>
-                        <th scope="col">Finish lottery</th>
-                        <th scope="col">Status</th>
-                    </tr>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Thumbnail</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Count tickets</th>
+                    <th scope="col">Price tickets</th>
+                    <th scope="col">Start lottery</th>
+                    <th scope="col">Finish lottery</th>
+                    <th scope="col">Status</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {% for item in page_obj %}
-                        <tr>
-                            <th scope="row">{{ item.id }}</th>
-                            <td><img src="{{ item.thumbnail.url }}" alt=""></td>
-                            <td><a href="{% url 'view-lottery' item.id %}">{{ item.name }}</a></td>
-                            <td>{{ item.count_ticket }}</td>
-                            <td>{{ item.ticket_price }}</td>
-                            <td>{{ item.start }}</td>
-                            <td>{{ item.finish }}</td>
-                            <td>{{ item.status }}</td>
-                        </tr>
-                    {% endfor %}
+                {% for item in page_obj %}
+                    <tr>
+                        <th scope="row">{{ item.id }}</th>
+                        <td><img src="{{ item.thumbnail.url }}" alt=""></td>
+                        <td><a href="{% url 'view-lottery' item.id %}">{{ item.name }}</a></td>
+                        <td>{{ item.count_ticket }}</td>
+                        <td>{{ item.ticket_price }}</td>
+                        <td>{{ item.start }}</td>
+                        <td>{{ item.finish }}</td>
+                        <td>{{ item.status }}</td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
-    <div class="row">
+        {% if page_obj.paginator.num_pages > 1 %}
+            <div class="row">
                 <nav>
                     <ul class="pagination">
                         <input type="hidden" id="count_pages" value="{{ page_obj.paginator.num_pages }}">
@@ -86,6 +87,7 @@
                     </ul>
                 </nav>
             </div>
+        {% endif %}
     </div>
 </main>
 {% include 'public/pieces/footer.html' %}

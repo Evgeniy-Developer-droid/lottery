@@ -47,3 +47,8 @@ class UserReview(models.Model):
     destination = models.ForeignKey(User, on_delete=models.CASCADE, related_name="review_destination")
     body = models.TextField()
 
+
+class Report(models.Model):
+    name = models.CharField(max_length=255, default="")
+    email = models.EmailField(max_length=255, default="")
+    text = models.TextField()

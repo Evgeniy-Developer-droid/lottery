@@ -28,7 +28,7 @@ class Profile(models.Model):
 
 class Wallet(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    coins = models.IntegerField(default=0)
+    coins = models.FloatField(default=0)
 
     def __str__(self):
         return self.user.username

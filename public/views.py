@@ -9,8 +9,9 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.conf import settings
-from public.forms import SignUpForm, LoginForm
+from public.forms import SignUpForm, LoginForm, ContactUsForm
 from public.Business.lottery_logic import get_lotterys_for_catalog, get_lottery_by_id, get_tickets_meta, get_winners_single
+from public.models import Report
 from user.Business.lottery_logic import get_coins_by_user
 from user.token import account_activation_token
 
@@ -20,9 +21,28 @@ def index(request):
     return render(request, 'public/index.html', {'coins': coins, "title": "Lottery"})
 
 
+def privacy(request):
+    coins = get_coins_by_user(request)
+    return render(request, 'public/privacy.html', {'coins': coins, "title": "Privacy and policy"})
+
+
 def logout_(request):
     logout(request)
     return redirect('signin')
+
+
+def contact_us(request):
+    coins = get_coins_by_user(request)
+    if request.method == 'POST':
+        form = ContactUsForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data.get('name', '')
+            email = form.cleaned_data.get('email', '')
+            text = form.cleaned_data.get('text', '')
+            Report(name=name, email=email, text=text).save()
+            return render(request, 'public/contact_us.html', {'coins': coins, "saved": True, "title": "Contact us"})
+    form = ContactUsForm()
+    return render(request, 'public/contact_us.html', {'coins': coins, 'form': form, "title": "Contact us"})
 
 
 def signin(request):
