@@ -1,0 +1,50 @@
+#search_form_header{
+    position: relative;
+}
+
+#mini_search_result_wrap{
+    position: absolute;
+    min-height: 10vh;
+    min-width: 100%;
+    display: flex;
+    background: aliceblue;
+    overflow-y: scroll;
+    z-index: 11;
+    max-height: 40vh;
+    overflow-x: hidden;
+}
+#mini_search_result_wrap .item-lottery-mini{
+    width: 100%;
+    background: white;
+}
+#mini_search_result_wrap .item-lottery-mini img{
+    width: 100%;
+}
+#mini_search_result_wrap .item-lottery-mini .image{
+
+}
+#mini_search_result_wrap .item-lottery-mini .info{
+    margin-left: 10px;
+}
+#mini_search_result_wrap .item-lottery-mini .info p span{
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+}
+
+#mini_search_result_wrap .item-lottery-mini .info p span.active{
+    background: green;
+    box-shadow: 0 0 13px #0fb60f;
+}
+#mini_search_result_wrap .item-lottery-mini .info p span.canceled{
+    background: #800000;
+    box-shadow: 0 0 13px #af1717;
+}
+#mini_search_result_wrap .item-lottery-mini .info p span.finished{
+    background: #3a0060;
+    box-shadow: 0 0 13px #5f0e96;
+}
+
+#spinner_header{
+    display: none;
+}

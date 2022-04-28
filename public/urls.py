@@ -1,5 +1,6 @@
 from django.urls import path, re_path
 from . import views
+from . import api
 
 urlpatterns = [
     path('', views.index, name="index"),
@@ -13,4 +14,6 @@ urlpatterns = [
 
     re_path(r'^activate/(?P<uidb64>[\dA-Za-z_\-]+)/(?P<token>[\dA-Za-z]{1,13}-[\dA-Za-z]{1,100})/$',
         views.activate, name='activate'),
+
+    path('api/search-product-mini', api.search_product_mini, name="search-product-mini"),
 ]

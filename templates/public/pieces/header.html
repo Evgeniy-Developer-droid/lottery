@@ -14,8 +14,9 @@
                 <li><a href="{% url 'contact_us' %}" class="nav-link px-2 text-white">Contact us</a></li>
             </ul>
 
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" id="search_form_header">
                 <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                <div id="mini_search_result_wrap" style="display: none !important;" class="flex-column p-2"></div>
             </form>
 
             <div class="text-end">
@@ -36,7 +37,7 @@
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href='{% url "logout" %}'>Log out</a></li>
                         </ul>
-                        <a class="btn btn-light" style="margin-left: 5px" href="{% url 'replenish_the_balance' %}">$ {{ coins }}.00</a>
+                        <a class="btn btn-light" style="margin-left: 5px" href="{% url 'replenish_the_balance' %}">$ {{ coins }}</a>
                     </div>
                 {% else %}
                     <a href='{% url "signin" %}' class="btn btn-outline-light me-2">Sign in</a>
