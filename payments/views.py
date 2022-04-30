@@ -19,7 +19,8 @@ from .models import AdminSetting, Transaction
 @login_required(login_url='/signin/')
 def replenish_the_balance(request):
     coins = get_coins_by_user(request)
-    return render(request, "payments/replenish_the_balance.html", {'coins': coins,})
+    credentials = AdminSetting.objects.all().first()
+    return render(request, "payments/replenish_the_balance.html", {'coins': coins, "title": "Refill", "cred": credentials})
 
 
 class PayView(TemplateView):
@@ -28,16 +29,22 @@ class PayView(TemplateView):
     def get(self, request, *args, **kwargs):
         credentials = AdminSetting.objects.all().first()
         coins = get_coins_by_user(request)
+
         if credentials and request.GET.get("amount") and request.GET.get("order_id"):
+            amount = float(request.GET['amount'])
+            if amount < credentials.threshold:
+                amount += credentials.tax_top_up_fixed
+            else:
+                amount += (amount * (credentials.tax_top_up_percent / 100))
             liqpay = LiqPay(credentials.liqpay_public_key, credentials.liqpay_private_key)
             params = {
                 'action': 'pay',
-                'amount': request.GET['amount'],
+                'amount': amount,
                 'currency': 'USD',
                 'description': 'Lottery balance',
                 'order_id': request.GET['order_id'],
                 'version': '3',
-                'sandbox': 1, # sandbox mode, set to 1 to enable it
+                'sandbox': 1,  # sandbox mode, set to 1 to enable it
                 'server_url': 'https://127.0.0.1:8000/payments/pay-callback/',
                 'extra_field': 'some'
             }

@@ -26,12 +26,12 @@
                     <input type="hidden" id="lottery_id" value="{{ item.id }}">
                     <div class="card mb-4">
                         <a href="#!"><img class="card-img-top" src="{{ item.thumbnail.url }}" alt="..."></a>
-                        <div class="card-body">
-                            <div class="small text-muted"> Created : {{ item.start }}</div>
-                            <div class="small text-muted"> Start lottery : {{ item.finish }}</div>
-                            <h2 class="card-title">{{ item.name }}</h2>
-                            <p class="card-text">{{ item.description }}</p>
-                        </div>
+{#                        <div class="card-body">#}
+{#                            <div class="small text-muted"> Created : {{ item.start }}</div>#}
+{#                            <div class="small text-muted"> Start lottery : {{ item.finish }}</div>#}
+{#                            <h2 class="card-title">{{ item.name }}</h2>#}
+{#                            <p class="card-text">{{ item.description }}</p>#}
+{#                        </div>#}
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -80,7 +80,20 @@
                     <div class="card mb-4">
                         <div class="card-header bg-dark text-white">Info</div>
                         <div class="card-body">
-                            <div class="font-weight-light"><strong>Price : </strong>${{ item.ticket_price }}.00</div>
+                            <h6 class="card-title">{{ item.name }}</h6>
+                            <div class="small text-muted"> Created : {{ item.start }}</div>
+                            <div class="small text-muted"> Start lottery : {{ item.finish }}</div>
+                            <p class="card-text">{{ item.description }}</p>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header bg-dark text-white">Details</div>
+                        <div class="card-body">
+                            <div class="font-weight-light"><strong>Price : </strong>${{ item.ticket_price }}</div>
+                            <div class="font-weight-light"><strong>Type of gift : </strong>{{ item.type_gift }}</div>
+                            {% if item.type_gift == 'money' %}
+                                <div class="font-weight-light"><strong>Money gift : </strong>${{ item.money_gift }}</div>
+                            {% endif %}
                             <div class="font-weight-light"><strong>Total number of tickets : </strong>{{ item.count_ticket }}</div>
                             <div class="font-weight-light"><strong>Number of tickets purchased : </strong>{{ tickets.purchased }}</div>
                             <div class="font-weight-light"><strong>Remaining tickets : </strong>{{ tickets.remaining }}</div>

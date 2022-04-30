@@ -9,6 +9,11 @@ from user.models import Wallet
 class AdminSetting(models.Model):
     liqpay_public_key = models.CharField(max_length=255, null=True, blank=True)
     liqpay_private_key = models.CharField(max_length=255, null=True, blank=True)
+    threshold = models.FloatField(default=0)
+    tax_top_up_fixed = models.FloatField(default=0)
+    tax_top_up_percent = models.FloatField(default=0)
+    tax_withdrawal_fixed = models.FloatField(default=0)
+    tax_withdrawal_percent = models.FloatField(default=0)
 
 
 class Transaction(models.Model):

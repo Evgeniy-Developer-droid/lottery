@@ -8,6 +8,18 @@ from user.models import Wallet, Rating, Complain
 
 def create_lottery(form, request):
     if form.is_valid() and ('thumbnail' in request.FILES):
+        tickets = int(request.POST.get('count_ticket'))
+        winners = int(request.POST.get('count_winners'))
+        if winners > tickets:
+            return {'message': 'The number of winners is greater than the number of tickets', 'type': 'error'}
+        if request.POST.get('type_gift') == 'money':
+            main_sum = float(request.POST.get('money_gift')) * winners
+            if request.user.wallet.coins > main_sum:
+                wallet = Wallet.objects.get(user=request.user.pk)
+                wallet.coins -= main_sum
+                wallet.save()
+            else:
+                return {'message': 'You don`t have enough money', 'type': 'error'}
         lottery = form.save()
         lottery.refresh_from_db()
         lottery.user = request.user
@@ -78,23 +90,36 @@ def define_lottery_winners(request, data):
         if not valid_error:
             challengers = Ticket.objects.filter(lottery=lottery.id)
             owner_wallet = Wallet.objects.get(user=request.user.id)
-            count_winners = 2
+            count_winners = lottery.count_winners
             if challengers.count() == 0:
+
+                if lottery.type_gift == 'money':
+                    owner_wallet.coins += lottery.money_gift
+                    owner_wallet.save()
+
                 lottery.status = 'finished'
                 lottery.save()
-                return {'message': "Lottery is finish, winners not found because count of players 0.", 'type': 'success'}
+                return {'message': "Lottery is finish, winners not found because count of players 0. Your money is back",
+                        'type': 'success'}
             if count_winners >= challengers.count():
                 winners = challengers
             else:
                 possible_ids = list(challengers.values_list('id', flat=True))
                 possible_ids = random.choices(possible_ids, k=count_winners)
-                winners = challengers.filter(pk__in=possible_ids)
-                print(challengers)
-                lossers = challengers.exclude(pk__in=possible_ids)
+                winners = challengers.filter(pk__in=possible_ids)  # get winners
+                lossers = challengers.exclude(pk__in=possible_ids)  # get lossers
                 lossers.update(status='lose')
 
+            # add balance to owner
             owner_wallet.coins += challengers.count() * lottery.ticket_price
             owner_wallet.save()
+
+            if lottery.type_gift == 'money':
+                for winner in winners:
+                    # add gift balance
+                    wallet_winner = Wallet.objects.get(user=winner.user.pk)
+                    wallet_winner.coins += lottery.money_gift
+                    wallet_winner.save()
 
             winners.update(status='win')
             info_winners = get_winners_data(winners)

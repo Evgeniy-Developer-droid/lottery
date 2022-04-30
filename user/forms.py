@@ -28,4 +28,10 @@ class NewLotteryForm(ModelForm):
 
     class Meta:
         model = Lottery
-        fields = ['name', 'description', 'thumbnail', 'count_ticket', 'ticket_price', 'finish']
+        fields = ['name', 'description', 'thumbnail', 'count_ticket',
+                  'ticket_price', 'type_gift', 'money_gift', 'finish', 'count_winners']
+
+    def __init__(self, *args, **kwargs):
+        super(NewLotteryForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'

@@ -15,19 +15,39 @@
 <main>
     <div class="container">
         <div class="row" style="margin-top: 20px">
+            <input type="hidden" value="{% if cred %}{{ cred.threshold }}{% else %}0{% endif %}" id="threshold">
+            <input type="hidden" value="{% if cred %}{{ cred.tax_top_up_fixed }}{% else %}0{% endif %}" id="tax_top_up_fixed">
+            <input type="hidden" value="{% if cred %}{{ cred.tax_top_up_percent }}{% else %}0{% endif %}" id="tax_top_up_percent">
+            <div class="info">
+                <h4>Refill</h4>
+                <p>Commission for enrollment:</p>
+                <ul>
+                    <li>If the amount to be credited is less than {% if cred %}{{ cred.threshold }}{% else %}0{% endif %}, the commission will be - ${% if cred %}{{ cred.tax_top_up_fixed }}{% else %}0{% endif %}.</li>
+                    <li>If the amount to be credited is more than {% if cred %}{{ cred.threshold }}{% else %}0{% endif %}, the commission will be {% if cred %}{{ cred.tax_top_up_percent }}{% else %}0{% endif %}% of the amount credited.</li>
+                </ul>
+                <p class="text-muted">Additional fees from your bank may apply.</p>
+
+            </div>
             <div class="alert alert-danger" style="display: none" role="alert"></div>
 
             <form>
-            <div class="form-row align-items-center">
-                <div class="col-auto">
-                    <label class="sr-only" for="amount">Coins</label>
-                    <input type="number" class="form-control mb-2" id="amount" placeholder="1">
+                <div class="row">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 mb-2">
+                            <input type="number" class="form-control" id="amount" placeholder="1">
+                        </div>
+                        <div class="col-md-4 mb-2 text-primary">
+                            <span>Commission: </span><span class="h4" id="commis">$0</span>
+                        </div>
+                        <div class="col-md-4 mb-2 text-success">
+                            <span>Total amount: </span><span class="h4" id="total">$0</span>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{% url 'pay_view' %}" id="pay-link" class="btn btn-primary mb-2">Refill</a>
+                    </div>
                 </div>
-                <div class="col-auto">
-                    <a href="{% url 'pay_view' %}" id="pay-link" class="btn btn-primary mb-2">Submit</a>
-                </div>
-            </div>
-        </form>
+            </form>
         </div>
     </div>
 </main>

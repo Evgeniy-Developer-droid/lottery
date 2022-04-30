@@ -26,5 +26,28 @@ jQuery(document).ready(function ($){
         }
     })
 
+    $('#amount').keyup(function (e){
+        let val = $(this).val();
+
+        const threshold = parseFloat($('#threshold').val());
+        const tax_top_up_fixed = parseFloat($('#tax_top_up_fixed').val());
+        const tax_top_up_percent = parseFloat($('#tax_top_up_percent').val());
+
+        if(val){
+            val = parseFloat(val)
+            if(val < threshold){
+                $('#commis').text('$'+tax_top_up_fixed)
+                $('#total').text('$'+(val+tax_top_up_fixed))
+            }else{
+                let commis = val * (tax_top_up_percent / 100)
+                $('#commis').text('$'+Math.round((commis) * 100) / 100)
+                $('#total').text('$'+Math.round((val+commis) * 100) / 100)
+            }
+        }else {
+            $('#commis').text('$0')
+            $('#total').text('$0')
+        }
+    })
+
 
 })

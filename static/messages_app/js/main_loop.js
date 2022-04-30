@@ -4,7 +4,7 @@ jQuery(document).ready(function ($){
     let socket = null;
 
 
-    if(user_id){
+    if(user_id !== 'None'){
         socket = new WebSocket(
             'ws://'
             + window.location.host

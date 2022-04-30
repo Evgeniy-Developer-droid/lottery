@@ -12,14 +12,18 @@ class Lottery(models.Model):
         ('canceled', 'Canceled'),
         ('finished', 'Finished'),
     )
+    TYPE_GIFT = (('thing', 'Thing'), ('money', 'Money'),)
     name = models.CharField(max_length=255, default="")
     description = models.TextField(default="")
     thumbnail = models.ImageField(upload_to='lottery_thumbnail', null=True, blank=True)
     count_ticket = models.IntegerField(default=1)
-    ticket_price = models.IntegerField(default=1)
+    count_winners = models.IntegerField(default=1)
+    ticket_price = models.FloatField(default=0.0)
     start = models.DateTimeField(auto_now_add=True)
     finish = models.DateTimeField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
+    type_gift = models.CharField(max_length=10, choices=TYPE_GIFT, default='money')
+    money_gift = models.FloatField(default=0.0)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):

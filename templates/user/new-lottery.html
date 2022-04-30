@@ -17,58 +17,60 @@
 {% include 'public/pieces/header.html' %}
 <main>
     <div class="container">
-        <div class="row form-wrap">
+        <div class="row">
             <form action="" method="post" enctype="multipart/form-data" autocomplete="off">
                 {% csrf_token %}
                 {% if error %}
                     <div class="alert alert-warning" role="alert">
-                      {{ error }}
+                        {{ error }}
                     </div>
                 {% endif %}
-                <div class="fieldWrapper">
 
-                    <label for="id_name">Name:</label> <input type="text" name="name" maxlength="255" required="" id="id_name">
-                </div>
-
-                <div class="fieldWrapper">
-
-                    <label for="id_description">Description:</label> <textarea name="description" cols="40" rows="10" required="" id="id_description"></textarea>
-                </div>
-
-                <div class="fieldWrapper">
-
-                    <label for="id_thumbnail">Thumbnail:</label> <input type="file" name="thumbnail" accept="image/*" id="id_thumbnail">
-                </div>
-
-                <div class="wrap_small_fields">
-                    <div class="fieldWrapper">
-
-                        <label for="id_count_ticket">Count ticket:</label> <input type="number" name="count_ticket" value="1" required="" id="id_count_ticket">
+                <div class="row mb-2">
+                    <div class="form-group col-md-5">
+                        <label for="{{ form.name.id_for_label }}">Name</label>
+                        {{ form.name }}
                     </div>
-
-                    <div class="fieldWrapper">
-
-                        <label for="id_ticket_price">Ticket price:</label> <input type="number" name="ticket_price" value="1" required="" id="id_ticket_price">
-                    </div>
-
-                    <div class="fieldWrapper">
-
-                        <label for="id_finish">Finish:</label> <input type="text" name="finish" class="datetimepicker-input" id="id_finish" required="">
+                    <div class="form-group col-md-5">
+                        <label for="{{ form.thumbnail.id_for_label }}">Thumbnail</label>
+                        {{ form.thumbnail }}
                     </div>
                 </div>
 
+                <div class="row mb-2">
+                    <div class="form-group col-md-4">
+                        <label for="{{ form.count_ticket.id_for_label }}">Count of tickets (PCS)</label>
+                        {{ form.count_ticket }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="{{ form.ticket_price.id_for_label }}">Cost of ticket ($)</label>
+                        {{ form.ticket_price }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="{{ form.count_winners.id_for_label }}">Count of winners (PCS)</label>
+                        {{ form.count_winners }}
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="form-group col-md-4">
+                        <label for="{{ form.finish.id_for_label }}">Finish lottery</label>
+                        {{ form.finish }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="{{ form.type_gift.id_for_label }}">Type of gift</label>
+                        {{ form.type_gift }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="{{ form.money_gift.id_for_label }}">Money ($)</label>
+                        {{ form.money_gift }}
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                        <label for="{{ form.description.id_for_label }}">Description</label>
+                        {{ form.description }}
+                    </div>
                 <button type="submit" class="btn btn-primary">Create</button>
             </form>
-            {#            <form action="" method="post" enctype="multipart/form-data" autocomplete="off">#}
-            {#                {% csrf_token %}#}
-            {#                {% for field in form %}#}
-            {#                    <div class="fieldWrapper">#}
-            {#                        {{ field.errors }}#}
-            {#                        {{ field.label_tag }} {{ field }}#}
-            {#                    </div>#}
-            {#                {% endfor %}#}
-            {#                <button type="submit" class="btn btn-primary">Create</button>#}
-            {#            </form>#}
         </div>
     </div>
 </main>
@@ -78,6 +80,14 @@
         $("#id_finish").datetimepicker({
             format: 'd/m/Y H:i',
         });
+
+        $("#{{ form.type_gift.id_for_label }}").change(function (e){
+            if($(this).val() === "thing"){
+                $('#{{ form.money_gift.id_for_label }}').parent().fadeOut()
+            }else{
+                $('#{{ form.money_gift.id_for_label }}').parent().fadeIn()
+            }
+        })
     });
 </script>
 </body>

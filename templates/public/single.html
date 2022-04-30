@@ -75,7 +75,7 @@
                                 <span class="pro-price" style="color: #5983fc"> {{ item.finish }}</span>
                             </div>
                             <div class="m-bot15"><strong>Price : </strong>
-                                <span class="pro-price"> ${{ item.ticket_price }}.00</span>
+                                <span class="pro-price"> ${{ item.ticket_price }}</span>
                             </div>
                             <div class="m-bot15"><strong>Total number of tickets : </strong>
                                 <span class="pro-price"> {{ item.count_ticket }}</span>
@@ -92,12 +92,14 @@
                             {#                            </div>#}
                             {% if user.is_authenticated %}
                                 {% if user.profile.type_user == "player" %}
-                                    <p>
-                                        <button class="btn btn-round btn-danger buy-button" type="button"><i
-                                                class="fa fa-shopping-cart"></i>
-                                            Buy ticket
-                                        </button>
-                                    </p>
+                                    {% if item.status == 'active' %}
+                                        <p>
+                                            <button class="btn btn-round btn-danger buy-button" type="button"><i
+                                                    class="fa fa-shopping-cart"></i>
+                                                Buy ticket
+                                            </button>
+                                        </p>
+                                    {% endif %}
                                 {% else %}
                                     <div class="alert alert-primary" role="alert">
                                         You can't buy tickets with your role. Your role is "Leader"

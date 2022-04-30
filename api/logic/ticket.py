@@ -22,6 +22,12 @@ def buy_ticket(request):
     if request.user.is_authenticated:
         if check_solvency(request.user.id, lottery.ticket_price):
             if check_available_tickets(lottery):
+                if lottery.status != 'active':
+                    return {
+                        'message': "Lottery is not active",
+                        'type': 'error',
+                        'meta': 'not auth'
+                    }
                 tickets = Ticket.objects.filter(lottery=lottery.id).count()
                 wallet = Wallet.objects.get(user=request.user.id)
                 wallet.coins -= lottery.ticket_price
