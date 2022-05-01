@@ -10,8 +10,10 @@ services:
       sh -c "python manage.py collectstatic --noinput &&
              python manage.py migrate &&
              gunicorn Lotery.asgi:application --bind 0.0.0.0:8000"
+    container_name: web_python
     volumes:
-      - static_volume:/home/app/web/staticfiles
+      - static_volume:/home/app/web/static
+      - media_volume:/home/app/web/media
     ports:
       - 8000:8000
     env_file:
@@ -20,10 +22,11 @@ services:
       - db
 
   db:
-    image: postgres:13.0-alpine
+    image: postgres:latest
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    container_name: db_python
 #    env_file:
 #      - ./.env.prod.db
     environment:
@@ -35,17 +38,20 @@ services:
     build: ./nginx
     restart: always
     volumes:
-      - static_volume:/home/app/web/staticfiles
+      - static_volume:/home/app/web/static
+      - media_volume:/home/app/web/media
+    container_name: nginx_python
     ports:
       - 80:80
     depends_on:
       - web
 
   redis:
-    image: redis
+    image: redis:latest
     restart: always
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
+    container_name: redis_python
     ports:
       - 6379:6379
 
@@ -91,3 +97,4 @@ services:
 volumes:
   postgres_data:
   static_volume:
+  media_volume:
