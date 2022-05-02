@@ -30,9 +30,9 @@ services:
 #    env_file:
 #      - ./.env.prod.db
     environment:
-      - POSTGRES_USER=user_prod
-      - POSTGRES_PASSWORD=pass_prod
-      - POSTGRES_DB=server_prod
+      - POSTGRES_USER=root_user
+      - POSTGRES_PASSWORD=nq4242DNe343qrnd
+      - POSTGRES_DB=lottery
 
   nginx:
     build: ./nginx
