@@ -67,6 +67,7 @@ class PayCallbackView(View):
             if sign == signature:
                 print('callback is valid')
             response = liqpay.decode_data_from_str(data)
+            print(response)
             if "status" in response:
                 Transaction(
                     payment_id=response.get("payment_id", "null"),
