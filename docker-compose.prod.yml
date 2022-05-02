@@ -4,7 +4,7 @@ services:
   web:
     build:
       context: ./
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     restart: always
     command: >
       sh -c "python manage.py collectstatic --noinput &&
@@ -58,7 +58,7 @@ services:
   celery-worker1:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     container_name: celery-worker1
     image: madefire/chordtest
     hostname: worker1
@@ -78,7 +78,7 @@ services:
   celery-beat:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     container_name: celery-beat
     image: madefire/chordtest
     hostname: beat
