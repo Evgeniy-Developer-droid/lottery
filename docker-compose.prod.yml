@@ -34,8 +34,8 @@ services:
              python manage.py migrate &&
              daphne -b 0.0.0.0 -p 8001 Lotery.asgi:application"
     volumes:
-      - static_volume:/home/app/web/static
-      - media_volume:/home/app/web/media
+      - static_files:/static/
+      - media_files:/media/
     container_name: daphne_python
     ports:
       - 8001:8001
