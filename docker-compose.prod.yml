@@ -6,6 +6,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     restart: always
+    working_dir: /django/
     image: "app_lottery"
 #    command: >
 #      sh -c "python manage.py collectstatic --noinput &&
@@ -14,8 +15,9 @@ services:
     command: bash -c "./manage.py runserver"
     container_name: web_python
     volumes:
-      - static_volume:/home/app/web/static
-      - media_volume:/home/app/web/media
+      - ".:/django/"
+      - static_files:/static/
+      - media_files:/media/
     ports:
       - 8000:8000
     env_file:
@@ -26,6 +28,7 @@ services:
   daphne:
     restart: always
     image: "app_lottery:latest"
+    working_dir: /django/
     command: >
       sh -c "python manage.py collectstatic --noinput &&
              python manage.py migrate &&
@@ -56,8 +59,8 @@ services:
     build: ./nginx
     restart: always
     volumes:
-      - static_volume:/home/app/web/static
-      - media_volume:/home/app/web/media
+      - static_files:/static/
+      - media_files:/media/
     container_name: nginx_python
     ports:
       - 80:80
@@ -114,5 +117,5 @@ services:
 
 volumes:
   postgres_data:
-  static_volume:
-  media_volume:
+  static_files:
+  media_files:
