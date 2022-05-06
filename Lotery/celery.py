@@ -9,7 +9,7 @@ app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
     'add-every-5-minute': {
-        'task': 'public.tasks.main',
+        'task': 'public.tasks.canceled_lottery',
         'schedule': 10,
     },
 }

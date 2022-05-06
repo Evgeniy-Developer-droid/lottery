@@ -5,6 +5,7 @@
 __pycache__
 db.sqlite3
 media
+static
 
 # Backup files #
 *.bak
@@ -92,6 +93,7 @@ coverage.xml
 
 # celery
 celerybeat-schedule.*
+celerybeat-schedule
 
 # SageMath parsed files
 *.sage.py

@@ -1,5 +1,5 @@
 jQuery(document).ready(function ($){
-
+    // some
 
     function generateOrder() {
         let chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

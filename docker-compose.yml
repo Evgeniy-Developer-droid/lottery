@@ -1,18 +1,15 @@
-version: '3.7'
+version: '3.9'
 
 services:
   web:
     build:
       context: ./
-      dockerfile: Dockerfile
-    command: >
-      sh -c "python manage.py collectstatic --noinput &&
-             python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+      dockerfile: Dockerfile.dev
+    command: python manage.py runserver 0.0.0.0:8000
     container_name: web_python
+    restart: always
     volumes:
-      - static_volume:/home/app/web/static
-      - media_volume:/home/app/web/media
+      - .:/code
     ports:
       - 8000:8000
     env_file:
@@ -41,7 +38,7 @@ services:
   celery-worker1:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: celery-worker1
     image: madefire/chordtest
     hostname: worker1
@@ -49,8 +46,7 @@ services:
       - ./.env
     command: ['celery', '-A', 'Lotery.celery.app', 'worker', '-l', 'info']
     volumes:
-      - ./:/code
-      - /etc/localtime:/etc/localtime:ro
+      - .:/code
     links:
       - redis
     depends_on:
@@ -61,7 +57,7 @@ services:
   celery-beat:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: celery-beat
     image: madefire/chordtest
     hostname: beat
@@ -69,8 +65,7 @@ services:
       - ./.env
     command: ['celery', '-A', 'Lotery.celery.app', 'beat', '-l', 'info']
     volumes:
-      - ./:/code
-      - /etc/localtime:/etc/localtime:ro
+      - .:/code
     links:
       - redis
     depends_on:
@@ -79,5 +74,3 @@ services:
 
 volumes:
   postgres_data:
-  static_volume:
-  media_volume:

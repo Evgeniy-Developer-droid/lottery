@@ -57,10 +57,10 @@ def new_lottery(request):
         else:
             return render(request, 'user/new-lottery.html', {'form': form,
                                                              "title": "New lottery",
-                                                             'error': result['message'], 'coins':coins})
+                                                             'error': result['message'], 'coins': coins})
     else:
         form = NewLotteryForm()
-    return render(request, 'user/new-lottery.html', {'form': form, "title": "New lottery", 'coins':coins})
+    return render(request, 'user/new-lottery.html', {'form': form, "title": "New lottery", 'coins': coins})
 
 
 @login_required(login_url='/signin/')

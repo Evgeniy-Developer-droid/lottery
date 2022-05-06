@@ -121,3 +121,4 @@ CELERY_RESULT_BACKEND = "redis://{}:{}/0".format(REDIS_HOST, REDIS_PORT)
 
 
 # docker run -p 6379:6379 -d redis:5
+# docker-compose up -d --no-deps --build celery-worker1
