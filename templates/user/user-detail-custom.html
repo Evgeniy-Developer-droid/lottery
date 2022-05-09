@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'user/css/user-detail-custom.css' %}">
+    <link rel="stylesheet" href="{% static 'public/css/header-custom.css' %}">
+    <link rel="stylesheet" href="{% static 'public/css/main-custom.css' %}">
+</head>
+<body>
+{% include 'public/pieces/header-custom.html' %}
+<main>
+    <div class="container">
+        {% if error %}
+            <div class="alert" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+        <div class="alert" style="display: none" id="messages-response"></div>
+    </div>
+    <div class="container">
+        <div class="row-flex" style="margin-top: 20px"  >
+            {% if not error %}
+                <input type="hidden" id="target_user" value="{{ user_data.pk }}">
+
+                <div class="col card-wrapper">
+
+                    <div class="card">
+                        <div class="card-body user-info-wrap">
+                            <div class="icon-big">
+                                {% if user_data.id == user.id %} <div class="change-avatar"><i class="bi bi-plus-circle-fill"></i></div>    {% endif %}
+                                <img src="{% if user_data.profile.image %}{{ user_data.profile.image.url }}{% else %}{% static 'public/img/default-user-icon.jpg' %}{% endif %}" alt="Admin" class="rounded-circle" width="150">
+                            </div>
+
+                            <div class="user-info">
+                                <h4>{{ user_data.first_name }} {{ user_data.last_name }}</h4>
+                                <div>
+                                    <span title="complaints" style="margin-left: 5px"><i style="color: red" class="bi bi-emoji-angry-fill"></i> {{ user_data.profile.complaints }}</span>
+                                    <span title="rating" style="margin-left: 5px"><i style="color: green" class="bi bi-bar-chart-line-fill"></i> {{ user_data.profile.rating }}</span>
+                                </div>
+                                <div class="btn-group">
+                                    {% if user_data.id != user.id %}
+                                        <button class="btn btn-blue" id="new-message">Message</button>
+                                    {% endif %}
+                                    {% if display_rating_button %}
+                                        <button class="btn btn-yellow" id="estimate">Estimate</button>
+                                    {% endif %}
+                                    {% if display_complain_button %}
+                                        <button class="btn btn-red" id="complain">Complain</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap field-row">
+                                {% if user_data.id == user.id %}
+                                    <div style="display: none" class="btn-custom">edit</div>
+                                {% endif %}
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe mr-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Website</h6>
+                                {% if user_data.id == user.id %}
+                                    <div class="col-sm-9 input-group" style="display: none">
+                                        <input type="text" maxlength="255" class="form-control" data-action="website" value="{{ user_data.profile.website }}">
+                                        <button class="btn btn-primary btn-save">Save</button>
+                                    </div>
+                                {% endif %}
+                                <span class="text-secondary">{{ user_data.profile.website }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap field-row">
+                                {% if user_data.id == user.id %}
+                                    <div style="display: none" class="btn-custom">edit</div>
+                                {% endif %}
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter mr-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>Twitter</h6>
+                                {% if user_data.id == user.id %}
+                                    <div class="col-sm-9 input-group" style="display: none">
+                                        <input type="text" maxlength="255" class="form-control" data-action="twitter" value="{{ user_data.profile.twitter }}">
+                                        <button class="btn btn-primary btn-save">Save</button>
+                                    </div>
+                                {% endif %}
+                                <span class="text-secondary">{{ user_data.profile.twitter }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap field-row">
+                                {% if user_data.id == user.id %}
+                                    <div style="display: none" class="btn-custom">edit</div>
+                                {% endif %}
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram mr-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
+                                {% if user_data.id == user.id %}
+                                    <div class="col-sm-9 input-group" style="display: none">
+                                        <input type="text" maxlength="255" class="form-control" data-action="instagram" value="{{ user_data.profile.instagram }}">
+                                        <button class="btn btn-primary btn-save">Save</button>
+                                    </div>
+                                {% endif %}
+                                <span class="text-secondary">{{ user_data.profile.instagram }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap field-row">
+                                {% if user_data.id == user.id %}
+                                    <div style="display: none" class="btn-custom">edit</div>
+                                {% endif %}
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
+                                {% if user_data.id == user.id %}
+                                    <div class="col-sm-9 input-group" style="display: none">
+                                        <input type="text" maxlength="255" class="form-control" data-action="facebook" value="{{ user_data.profile.facebook  }}">
+                                        <button class="btn btn-primary btn-save">Save</button>
+                                    </div>
+                                {% endif %}
+                                <span class="text-secondary">{{ user_data.profile.facebook }}</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="col col-full-width card-wrapper">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row field-row">
+                                {% if user_data.id == user.id %}
+                                    <div style="display: none" class="btn-custom">edit</div>
+                                {% endif %}
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                {% if user_data.id == user.id %}
+                                    <div class="col-sm-9 input-group" style="display: none">
+                                        <input type="text" maxlength="255" class="form-control" data-action="email" value="{{ user_data.email }}">
+                                        <button class="btn btn-primary btn-save">Save</button>
+                                    </div>
+                                {% endif %}
+                                <div class="col-sm-9 text-secondary">
+                                    {{ user_data.email }}
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row field-row">
+                                {% if user_data.id == user.id %}
+                                    <div style="display: none" class="btn-custom">edit</div>
+                                {% endif %}
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Phone</h6>
+                                </div>
+                                {% if user_data.id == user.id %}
+                                    <div class="col-sm-9 input-group" style="display: none">
+                                        <input type="text" maxlength="255" class="form-control" data-action="phone" value="{{ user_data.profile.phone }}">
+                                        <button class="btn btn-primary btn-save">Save</button>
+                                    </div>
+                                {% endif %}
+                                <div class="col-sm-9 text-secondary">
+                                    {{ user_data.profile.phone }}
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row field-row">
+                                {% if user_data.id == user.id %}
+                                    <div style="display: none" class="btn-custom">edit</div>
+                                {% endif %}
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Address</h6>
+                                </div>
+                                {% if user_data.id == user.id %}
+                                    <div class="col-sm-9 input-group" style="display: none">
+                                        <input type="text" maxlength="255" class="form-control" data-action="address" value="{{ user_data.profile.address }}">
+                                        <button class="btn btn-primary btn-save">Save</button>
+                                    </div>
+                                {% endif %}
+                                <div class="col-sm-9 text-secondary">
+                                    {{ user_data.profile.address }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="d-flex row">
+                            <div class="col-md-12">
+                                <div class="d-flex flex-column comment-section">
+                                    {% if user.is_authenticated %}
+                                        {% if result %}
+                                            <div class="alert alert-{{ result.type }}" role="alert" style="margin-top: 20px">
+                                                {{ result.message }}
+                                            </div>
+                                        {% endif %}
+                                        <div class="bg-light p-2">
+                                            <form action="" method="post">
+                                                {% csrf_token %}
+                                                <div class="d-flex flex-row align-items-start">
+                                                    <img class="rounded-circle"
+                                                         src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}{% static 'public/img/default-user-icon.jpg' %}{% endif %}"
+                                                         width="40">
+                                                    <textarea class="form-control ml-1 shadow-none textarea" name="body"></textarea>
+                                                </div>
+                                                <div class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="submit">Post comment</button></div>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+
+                                    {% for review in reviews %}
+                                        <div class="bg-white p-2">
+                                            <div class="d-flex flex-row user-info">
+                                                <img class="rounded-circle"
+                                                     src="{% if review.author.profile.image %}{{ review.author.profile.image.url }}{% else %}{% static 'public/img/default-user-icon.jpg' %}{% endif %}" width="40">
+                                                <div class="d-flex flex-column justify-content-start ml-2">
+                                                    <a href="{% url 'user-detail' review.author.pk %}"><span class="d-block font-weight-bold name">{{ review.author.first_name }} {{ review.author.last_name }}</span></a>
+                                                    <span class="date text-black-50">Shared publicly - {{ review.timestamp }}</span></div>
+                                            </div>
+                                            <div class="mt-2">
+                                                <p class="comment-text">{{ review.body }}</p>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    {% endfor %}
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+
+
+
+{% if display_rating_button %}
+    <div class="modal modal-alert py-5 bg-custom-modal" tabindex="-1" role="dialog" id="modalChoice">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-body p-4 text-center modal-content-wrap">
+                    <div class="form-group">
+                        <button class="btn btn-outline-primary btn-rating">1</button>
+                        <button class="btn btn-outline-primary btn-rating">2</button>
+                        <button class="btn btn-outline-primary btn-rating">3</button>
+                        <button class="btn btn-outline-primary btn-rating">4</button>
+                        <button class="btn btn-outline-primary btn-rating">5</button>
+                        <button class="btn btn-outline-primary btn-rating">6</button>
+                        <button class="btn btn-outline-primary btn-rating">7</button>
+                        <button class="btn btn-outline-primary btn-rating">8</button>
+                        <button class="btn btn-outline-primary btn-rating">9</button>
+                        <button class="btn btn-outline-primary btn-rating">10</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-shadow"></div>
+{% endif %}
+
+
+
+<div class="hidden">
+    <input type="file" class="file" id="file" accept="image/*">
+</div>
+
+
+{% include 'public/pieces/footer.html' %}
+<script src="{% static 'user/js/user-detail.js' %}"></script>
+</body>
+</html>

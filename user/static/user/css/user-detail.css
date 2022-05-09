@@ -112,3 +112,13 @@ body{
     border-radius: 10px;
     cursor: pointer;
 }
+
+/*============media===============*/
+@media (min-width: 768px){
+    .container, .container-md, .container-sm {
+        width: 100%;
+        /*background: #0c4128 ;*/
+    }
+}
+
+/*================================*/

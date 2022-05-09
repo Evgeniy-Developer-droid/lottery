@@ -114,7 +114,7 @@ EMAIL_HOST_PASSWORD = 'iemmevdatpsepdxr'
 EMAIL_PORT = 587
 
 
-REDIS_HOST = os.environ.get("REDIS_HOST", "127.0.0.1")
+REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
 REDIS_PORT = '6379'
 CELERY_BROKER_URL = "redis://{}:{}/0".format(REDIS_HOST, REDIS_PORT)
 CELERY_RESULT_BACKEND = "redis://{}:{}/0".format(REDIS_HOST, REDIS_PORT)
