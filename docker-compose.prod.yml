@@ -51,7 +51,7 @@ services:
   redis:
     image: redis:latest
     restart: always
-    command: redis-server --requirepass jjKN4f3nnjsoii434
+    command: redis-server
     volumes:
       - $PWD/redis-data:/var/lib/redis
       - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
